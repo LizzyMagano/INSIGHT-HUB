@@ -3,24 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Your Cart</title>
 <style>
-body { font-family: Arial; text-align:center; }
+body { font-family: Arial; text-align:center; margin:0; background:white; color:#b30000; }
 header { background:#b30000; color:white; padding:20px; }
+.cart-item { border:1px solid #eee; margin:15px; padding:15px; border-radius:10px; display:inline-block; width:250px; background:white; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+.cart-item img { width:200px; height:auto; }
+button { margin:5px; padding:10px; background:#b30000; color:white; border:none; border-radius:6px; cursor:pointer;}
+button:hover { background:white; color:#b30000; border:2px solid #b30000; }
 </style>
 </head>
-
 <body>
 
 <header>
 <h1>Your Cart</h1>
 </header>
 
-<p id="cart"></p>
+<div id="cart"></div>
+
+<button onclick="goBack()">← Browse More</button>
+<button onclick="checkout()">Checkout 🛒</button>
 
 <script>
-let item = localStorage.getItem("cart");
-document.getElementById("cart").innerText = item ? item : "Cart is empty";
+// Load cart from localStorage
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cartDiv = document.getElementById("cart");
+
+function renderCart() {
+    cartDiv.innerHTML = '';
+    if(cart.length === 0){
+        cartDiv.innerHTML = "<p>Cart is empty</p>";
+        return;
+    }
+
+    cart.forEach((item, index) => {
+        let div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <h3>${item.name}</h3>
+            <p>
+                Price: ${item.price}<br>
+                Deposit: ${item.deposit}<br>
+                Installments: ${item.installments}<br>
+                Storage: ${item.storage}<br>
+                Condition: Pre-owned, Refurbished
+            </p>
+            <button onclick="removeItem(${index})">Remove</button>
+        `;
+        cartDiv.appendChild(div);
+    });
+}
+
+// Remove a laptop from cart
+function removeItem(index){
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+}
+
+// Go back to browse
+function goBack() { window.location.href = "browse.html"; }
+
+// Checkout (send to form page)
+function checkout() {
+    if(cart.length === 0){
+        alert("Your cart is empty!");
+        return;
+    }
+    window.location.href = "form.html";
+}
+
+// Initial render
+renderCart();
 </script>
 
 </body>
