@@ -3,12 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - Insight Hive</title>
 
 <style>
-body { font-family: Arial; text-align:center; }
-form { max-width:400px; margin:auto; }
-input { width:100%; padding:10px; margin:10px 0; }
-button { background:#b30000; color:white; padding:10px; border:none; }
+body { 
+  font-family: Arial; 
+  text-align:center; 
+  margin:0; 
+  padding:0; 
+  background:white; 
+  color:#b30000; 
+}
+
+h1 { margin-top: 30px; font-size: 2rem; }
+
+form { 
+  max-width: 400px; 
+  margin: 30px auto; 
+  padding: 20px; 
+  border: 1px solid #eee; 
+  border-radius: 10px; 
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background:white;
+}
+
+input, select {
+  width: 100%; 
+  padding: 12px; 
+  margin: 10px 0; 
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+button {
+  background:#b30000; 
+  color:white; 
+  padding:12px; 
+  border:none; 
+  border-radius: 8px;
+  font-weight:bold;
+  cursor:pointer;
+  width: 100%;
+  transition: 0.3s;
+  margin-top: 15px;
+}
+
+button:hover {
+  background:white;
+  color:#b30000;
+  border: 2px solid #b30000;
+  transform: scale(1.05);
+}
+
+/* Go Back & Logout buttons */
+button.go-back, button.logout {
+  display:block;
+  width:200px;
+  margin: 15px auto;
+}
 </style>
 </head>
 
@@ -16,26 +69,59 @@ button { background:#b30000; color:white; padding:10px; border:none; }
 
 <h1>Checkout</h1>
 
-<form id="form">
-<input type="text" name="Name" placeholder="Name" required>
-<input type="text" name="Phone" placeholder="Phone" required>
-<input type="text" name="Laptop" placeholder="Laptop" required>
-<button>Send WhatsApp</button>
+<form id="checkoutForm">
+  <input type="text" name="Name" placeholder="Full Name" required>
+  <input type="email" name="Email" placeholder="Email" required>
+  <input type="tel" name="Phone" placeholder="Phone Number" required>
+  <input type="text" name="Address" placeholder="Address" required>
+  <input type="text" name="Laptop" placeholder="Laptop Model" value="" id="laptopInput" required>
+  <input type="text" name="Deposit" placeholder="Deposit Amount" required>
+  <select name="PaymentPlan" required>
+    <option value="">Select Payment Plan</option>
+    <option value="5x540">5 × 540</option>
+    <option value="5x600">5 × 600</option>
+    <option value="5x780">5 × 780</option>
+    <option value="5x1040">5 × 1040</option>
+    <option value="5x1000">5 × 1000</option>
+  </select>
+  <button type="submit">Send via WhatsApp</button>
 </form>
 
+<!-- Go Back & Logout Buttons -->
+<button class="go-back" onclick="goBack()">← Go Back</button>
+<button class="logout" onclick="logout()">Logout 🔒</button>
+
 <script>
-document.getElementById("form").addEventListener("submit", function(e){
-e.preventDefault();
+// Pre-fill Laptop field if selected from browse page
+document.addEventListener("DOMContentLoaded", function(){
+  let selectedLaptop = localStorage.getItem("selectedLaptop");
+  if(selectedLaptop){
+    document.getElementById("laptopInput").value = selectedLaptop;
+  }
+});
 
-let data = new FormData(this);
-let msg = "";
+// Form submission to WhatsApp
+document.getElementById("checkoutForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  let data = new FormData(this);
+  let msg = "";
+  for(let [k,v] of data){
+    msg += k + ": " + v + "%0A";
+  }
+  window.open("https://wa.me/26778549270?text="+msg);
+});
 
-for(let [k,v] of data){
-msg += k + ": " + v + "%0A";
+// Go Back function
+function goBack() {
+  window.history.back();
 }
 
-window.open("https://wa.me/26778549270?text="+msg);
-});
+// Logout function
+function logout() {
+  localStorage.removeItem("cart");
+  localStorage.removeItem("selectedLaptop");
+  window.location.href = "index.html";
+}
 </script>
 
 </body>
