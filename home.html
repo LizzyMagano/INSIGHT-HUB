@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insight Hive Laptops</title>
+
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      margin: 0;
+      padding: 0;
+      background: white;
+      color: #b30000;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Floating heart background */
+    body::before {
+      content: "❤";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      font-size: 40rem;
+      color: rgba(179, 0, 0, 0.08);
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      animation: floatHeart 6s ease-in-out infinite;
+    }
+
+    @keyframes floatHeart {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -55%) scale(1.05); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    h1 {
+      color: #b30000;
+      margin-top: 20px;
+      font-size: 2.5rem;
+      animation: pulse 2.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    p { font-size: 18px; }
+
+    .container { 
+      max-width: 500px; 
+      margin: auto; 
+      padding: 20px;
+    }
+
+    img {
+      margin-top: 20px;
+    }
+
+    a { 
+      display: block; 
+      margin: 15px auto; 
+      text-decoration: none; 
+      color: white; 
+      background: #b30000; 
+      padding: 12px; 
+      border-radius: 10px; 
+      width: 220px; 
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    a:hover { 
+      background: white; 
+      color: #b30000; 
+      border: 2px solid #b30000;
+      transform: scale(1.05); 
+    }
+
+    a:active {
+      transform: scale(0.95);
+    }
+
+    /* Highlight Form button */
+    a[href="form.html"] {
+      background: #e60000;
+      box-shadow: 0 0 15px rgba(230, 0, 0, 0.6);
+    }
+
+    #notify {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #b30000;
+    }
+
+    button {
+      background: #b30000;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 25px;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: white;
+      color: #b30000;
+      border: 2px solid #b30000;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Logo -->
+    <img src="logo.png" alt="Insight Hive Logo" width="120">
+
+    <h1>Insight Hive Laptops</h1>
+    <p>Choose, pay deposit and use while paying over time</p>
+
+    <!-- Navigation -->
+    <a href="about.html">About Us</a>
+    <a href="cart.html">Cart</a>
+    <a href="laptops.html">Laptops</a>
+    <a href="form.html">Apply Now</a>
+    <a href="contact.html">Contact Us</a>
+   
+    <p id="notify"></p>
+
+    <button onclick="logout()" aria-label="Logout">Logout 🔒</button>
+  </div>
+
+  <script>
+    // Improved update notification system
+    function checkUpdate() {
+      let lastSeen = localStorage.getItem("lastSeenUpdate");
+      let currentUpdate = "v1.1"; // Change this when you add new laptops
+
+      if (lastSeen !== currentUpdate) {
+        document.getElementById("notify").innerText =
+          "✨ New laptops just added! Check them out.";
+        localStorage.setItem("lastSeenUpdate", currentUpdate);
+      }
+    }
+
+    checkUpdate();
+
+    function logout() {
+      localStorage.removeItem("cart");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

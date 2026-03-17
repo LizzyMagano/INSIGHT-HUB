@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body { font-family: Arial; text-align:center; }
+form { max-width:400px; margin:auto; }
+input { width:100%; padding:10px; margin:10px 0; }
+button { background:#b30000; color:white; padding:10px; border:none; }
+</style>
+</head>
+
+<body>
+
+<h1>Checkout</h1>
+
+<form id="form">
+<input type="text" name="Name" placeholder="Name" required>
+<input type="text" name="Phone" placeholder="Phone" required>
+<input type="text" name="Laptop" placeholder="Laptop" required>
+<button>Send WhatsApp</button>
+</form>
+
+<script>
+document.getElementById("form").addEventListener("submit", function(e){
+e.preventDefault();
+
+let data = new FormData(this);
+let msg = "";
+
+for(let [k,v] of data){
+msg += k + ": " + v + "%0A";
+}
+
+window.open("https://wa.me/26778549270?text="+msg);
+});
+</script>
+
+</body>
+</html>

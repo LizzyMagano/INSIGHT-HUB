@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body { font-family: Arial; text-align:center; }
+header { background:#b30000; color:white; padding:20px; }
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Your Cart</h1>
+</header>
+
+<p id="cart"></p>
+
+<script>
+let item = localStorage.getItem("cart");
+document.getElementById("cart").innerText = item ? item : "Cart is empty";
+</script>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Laptops</title>
+
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  background: white;
+  color: #b30000;
+  text-align: center;
+}
+
+header {
+  background: #b30000;
+  color: white;
+  padding: 20px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Laptop cards */
+.laptop-card {
+  border: 1px solid #eee;
+  margin: 15px;
+  padding: 15px;
+  width: 250px;
+  display: inline-block;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.laptop-card img {
+  width: 200px;
+  height: auto;
+}
+
+button {
+  margin: 5px;
+  padding: 10px;
+  background: #b30000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: white;
+  color: #b30000;
+  border: 2px solid #b30000;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>Browse Laptops</h1>
+<nav>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="browse.html">View Laptops</a></li>
+<li><a href="cart.html">Cart</a></li>
+<li><a href="form.html">Form</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</nav>
+</header>
+
+<main>
+
+<!-- Laptop 1 -->
+<div class="laptop-card">
+<img src="dell.jpg">
+<h3>Dell Inspiron 15</h3>
+<p>P4200 | Deposit: P1500 | 5 × 540</p>
+<button onclick="buyNow('Dell Inspiron 15')">Buy Now</button>
+<button onclick="addToCart('Dell Inspiron 15')">Add to Cart</button>
+</div>
+
+<!-- Laptop 2 -->
+<div class="laptop-card">
+<img src="hp.jpg">
+<h3>HP Pavilion 14</h3>
+<p>P6000 | Deposit: P2000 | 5 × 800</p>
+<button onclick="buyNow('HP Pavilion 14')">Buy Now</button>
+<button onclick="addToCart('HP Pavilion 14')">Add to Cart</button>
+</div>
+
+<!-- Laptop 3 -->
+<div class="laptop-card">
+<img src="lenovo.jpg">
+<h3>Lenovo ThinkPad E14</h3>
+<p>P5500 | Deposit: P1600 | 5 × 780</p>
+<button onclick="buyNow('Lenovo ThinkPad E14')">Buy Now</button>
+<button onclick="addToCart('Lenovo ThinkPad E14')">Add to Cart</button>
+</div>
+
+<!-- Laptop 4 -->
+<div class="laptop-card">
+<img src="macbook.jpg">
+<h3>MacBook Air</h3>
+<p>P8000 | Deposit: P2800 | 5 × 1040</p>
+<button onclick="buyNow('MacBook Air')">Buy Now</button>
+<button onclick="addToCart('MacBook Air')">Add to Cart</button>
+</div>
+
+<!-- Laptop 5 -->
+<div class="laptop-card">
+<img src="book.jpg">
+<h3>MacBook Air (Alt)</h3>
+<p>P7000 | Deposit: P2000 | 5 × 1000</p>
+<button onclick="buyNow('MacBook Air Alt')">Buy Now</button>
+<button onclick="addToCart('MacBook Air Alt')">Add to Cart</button>
+</div>
+
+<!-- Laptop 6 -->
+<div class="laptop-card">
+<img src="cer.jpg">
+<h3>Acer</h3>
+<p>P3500 | Deposit: P1000 | 5 × 500</p>
+<button onclick="buyNow('Acer')">Buy Now</button>
+<button onclick="addToCart('Acer')">Add to Cart</button>
+</div>
+
+<!-- Laptop 7 -->
+<div class="laptop-card">
+<img src="core.jpg">
+<h3>HP Intel Core i3</h3>
+<p>P4500 | Deposit: P1500 | 5 × 600</p>
+<button onclick="buyNow('HP Core i3')">Buy Now</button>
+<button onclick="addToCart('HP Core i3')">Add to Cart</button>
+</div>
+
+<!-- Laptop 8 -->
+<div class="laptop-card">
+<img src="lap.jpg">
+<h3>Dell</h3>
+<p>P4000 | Deposit: P1200 | 5 × 560</p>
+<button onclick="buyNow('Dell')">Buy Now</button>
+<button onclick="addToCart('Dell')">Add to Cart</button>
+</div>
+
+<!-- Laptop 9 -->
+<div class="laptop-card">
+<img src="mac.jpg">
+<h3>MacBook Air Pro</h3>
+<p>P7500 | Deposit: P2500 | 5 × 1000</p>
+<button onclick="buyNow('MacBook Air Pro')">Buy Now</button>
+<button onclick="addToCart('MacBook Air Pro')">Add to Cart</button>
+</div>
+
+<!-- Laptop 10 -->
+<div class="laptop-card">
+<img src="novo.jpg">
+<h3>Lenovo</h3>
+<p>P5500 | Deposit: P1600 | 5 × 780</p>
+<button onclick="buyNow('Lenovo')">Buy Now</button>
+<button onclick="addToCart('Lenovo')">Add to Cart</button>
+</div>
+
+</main>
+
+<script>
+function addToCart(item){
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push(item);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert(item + " added to cart");
+}
+
+function buyNow(item){
+  localStorage.setItem("selectedLaptop", item);
+  window.location.href = "form.html";
+}
+</script>
+
+</body>
+</html>
