@@ -1,11 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - Insight Hive</title>
 
 <style>
-body { font-family: Arial; text-align:center; }
-header { background:#b30000; color:white; padding:20px; }
+body { 
+  font-family: Arial; 
+  text-align: center; 
+  margin:0; 
+  padding:0; 
+  background:white; 
+  color:#b30000; 
+  min-height: 100vh;
+}
+
+header { 
+  background:#b30000; 
+  color:white; 
+  padding:20px; 
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Buttons */
+button {
+  background: #b30000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 1rem;
+  transition: 0.3s;
+  display: block;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button:hover {
+  background: white;
+  color: #b30000;
+  border: 2px solid #b30000;
+  transform: scale(1.05);
+}
+
+p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
 </style>
 </head>
 
@@ -15,8 +65,30 @@ header { background:#b30000; color:white; padding:20px; }
 <h1>Contact Us</h1>
 </header>
 
-<p>Email: insighthive@email.com</p>
-<p>Phone: +267 78549270</p>
+<div class="container">
+  <p>Email: insighthive@email.com</p>
+  <p>Phone: +267 78549270</p>
+
+  <!-- Go Back Button -->
+  <button onclick="goBack()">← Go Back</button>
+
+  <!-- Logout Button -->
+  <button onclick="logout()">Logout 🔒</button>
+</div>
+
+<script>
+// Go Back function
+function goBack() {
+  window.history.back();
+}
+
+// Logout function
+function logout() {
+  localStorage.removeItem("cart");
+  localStorage.removeItem("selectedLaptop");
+  window.location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
