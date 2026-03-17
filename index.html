@@ -3,39 +3,148 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Insight Hive</title>
+<title>Insight Hive Home</title>
 
 <style>
-body { font-family: Arial; margin:0; background:white; color:#b30000; text-align:center; }
-header { background:#b30000; color:white; padding:20px; }
-nav ul { list-style:none; display:flex; justify-content:center; gap:15px; padding:0; }
-nav a { color:white; text-decoration:none; font-weight:bold; }
-.hero { margin-top:80px; }
-.btn { padding:12px 20px; background:#b30000; color:white; border-radius:8px; text-decoration:none; }
-.btn:hover { background:white; color:#b30000; border:2px solid #b30000; }
+body { 
+  font-family: Arial, sans-serif; 
+  text-align: center; 
+  margin: 0; 
+  padding: 0; 
+  background: white; 
+  color: #b30000; 
+  min-height: 100vh; 
+  overflow-x: hidden; 
+  position: relative;
+}
+
+/* Optional floating heart background like love-survey pages */
+body::before {
+  content: "❤";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  font-size: 40rem;
+  color: rgba(179, 0, 0, 0.05);
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  animation: floatHeart 6s ease-in-out infinite;
+}
+
+@keyframes floatHeart {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -55%) scale(1.05); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+h1 {
+  font-size: 2.5rem; 
+  margin-top: 40px; 
+  animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+p {
+  font-size: 1.2rem;
+  margin: 15px 0 30px 0;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+a.button {
+  display: block;
+  margin: 12px auto;
+  padding: 12px;
+  width: 220px;
+  text-decoration: none;
+  color: white;
+  background: #b30000;
+  font-weight: bold;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+a.button:hover {
+  background: white;
+  color: #b30000;
+  border: 2px solid #b30000;
+  transform: scale(1.05);
+}
+
+/* Highlight Browse button */
+a.button[href="browse.html"] {
+  background: #e60000;
+  box-shadow: 0 0 15px rgba(230,0,0,0.6);
+}
+
+#notify {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #b30000;
+}
+
+button.logout {
+  background: #b30000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 25px;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+button.logout:hover {
+  background: white;
+  color: #b30000;
+  border: 2px solid #b30000;
+  transform: scale(1.05);
+}
 </style>
 </head>
-
 <body>
 
-<header>
-<h1>Insight Hive Laptops</h1>
-<nav>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="browse.html">Browse</a></li>
-<li><a href="cart.html">Cart</a></li>
-<li><a href="form.html">Form</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</nav>
-</header>
+<div class="container">
+  <h1>Insight Hive Laptops</h1>
+  <p>Student-Friendly Laptop Hire Purchase – pay deposit, then small monthly payments</p>
 
-<div class="hero">
-<h2>Student-Friendly Laptop Hire Purchase</h2>
-<p>Pay deposit, then small monthly payments</p>
-<a href="browse.html" class="btn">Browse Laptops</a>
+  <!-- Hub Buttons -->
+  <a href="browse.html" class="button">Browse Laptops</a>
+  <a href="cart.html" class="button">Cart</a>
+  <a href="form.html" class="button">Apply Now</a>
+  <a href="contact.html" class="button">Contact Us</a>
+
+  <p id="notify"></p>
+  <button class="logout" onclick="logout()">Logout 🔒</button>
 </div>
+
+<script>
+function checkUpdate() {
+  let lastSeen = localStorage.getItem("lastSeenUpdate");
+  let currentUpdate = "v1.0"; // change version when updates happen
+  if(lastSeen !== currentUpdate){
+    document.getElementById("notify").innerText = "✨ New laptops just added! Check Browse Laptops.";
+    localStorage.setItem("lastSeenUpdate", currentUpdate);
+  }
+}
+checkUpdate();
+
+function logout() {
+  localStorage.removeItem("cart");
+  localStorage.removeItem("selectedLaptop");
+  window.location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
