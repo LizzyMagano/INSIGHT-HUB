@@ -15,31 +15,18 @@ body {
   color: #b30000; 
   min-height: 100vh; 
   overflow-x: hidden; 
-  position: relative;
 }
 
-/* Optional floating heart background like love-survey pages */
-body::before {
-  content: "❤";
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  font-size: 40rem;
-  color: rgba(179, 0, 0, 0.05);
-  transform: translate(-50%, -50%);
-  z-index: -1;
-  animation: floatHeart 6s ease-in-out infinite;
-}
-
-@keyframes floatHeart {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -55%) scale(1.05); }
-  100% { transform: translate(-50%, -50%) scale(1); }
+/* Hero Image */
+.hero img {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
 }
 
 h1 {
   font-size: 2.5rem; 
-  margin-top: 40px; 
+  margin-top: 20px; 
   animation: pulse 2.5s infinite;
 }
 
@@ -114,10 +101,16 @@ button.logout:hover {
 </head>
 <body>
 
+<!-- Image Section -->
+<div class="hero">
+  <img src="background.jpg" alt="Laptop Banner">
+</div>
+
 <div class="container">
   <h1>Insight Hive Laptops</h1>
   <p>Student-Friendly Laptop Hire Purchase – pay deposit, then small monthly payments</p>
- <p><strong>All laptops are pre-owned and refurbished ✔️</strong></p>
+  <p><strong>All laptops are pre-owned and refurbished ✔️</strong></p>
+
   <!-- Hub Buttons -->
   <a href="laptops.html" class="button">View Laptops</a>
   <a href="cart.html" class="button">Cart</a>
@@ -131,7 +124,7 @@ button.logout:hover {
 <script>
 function checkUpdate() {
   let lastSeen = localStorage.getItem("lastSeenUpdate");
-  let currentUpdate = "v1.0"; // change version when updates happen
+  let currentUpdate = "v1.0";
   if(lastSeen !== currentUpdate){
     document.getElementById("notify").innerText = "✨ New laptops just added! Check Browse Laptops.";
     localStorage.setItem("lastSeenUpdate", currentUpdate);
@@ -148,3 +141,4 @@ function logout() {
 
 </body>
 </html>
+
