@@ -19,7 +19,7 @@ button:hover { background:white; color:#b30000; border:2px solid #b30000; }
 <body>
 
 <header>
-<h1>Browse Laptops</h1>
+<h1>View Laptops</h1>
 <nav>
 <ul>
 <li><a href="index.html">Home</a></li>
@@ -124,9 +124,8 @@ button:hover { background:white; color:#b30000; border:2px solid #b30000; }
 <button onclick="addToCart(this)">Add to Cart</button>
 </div>
 
-<!-- Go Back & Logout -->
+<!-- Go Back  -->
 <button onclick="goBack()">← Go Back</button>
-<button onclick="logout()">Logout 🔒</button>
 
 <script>
 function addToCart(btn){
@@ -160,11 +159,7 @@ function buyNow(btn){
 }
 
 function goBack() { window.history.back(); }
-function logout() {
-  localStorage.removeItem("cart");
-  localStorage.removeItem("selectedLaptop");
-  window.location.href = "index.html";
-}
+
 </script>
 
 </body>
