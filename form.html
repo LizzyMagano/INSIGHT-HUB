@@ -89,7 +89,6 @@ button.go-back, button.logout {
 
 <!-- Go Back & Logout Buttons -->
 <button class="go-back" onclick="goBack()">← Go Back</button>
-<button class="logout" onclick="logout()">Logout 🔒</button>
 
 <script>
 // Pre-fill Laptop field if selected from browse page
@@ -114,13 +113,6 @@ document.getElementById("checkoutForm").addEventListener("submit", function(e){
 // Go Back function
 function goBack() {
   window.history.back();
-}
-
-// Logout function
-function logout() {
-  localStorage.removeItem("cart");
-  localStorage.removeItem("selectedLaptop");
-  window.location.href = "index.html";
 }
 </script>
 
