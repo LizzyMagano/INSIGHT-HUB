@@ -43,10 +43,10 @@ function renderCart() {
             <img src="${item.image}" alt="${item.name}">
             <h3>${item.name}</h3>
             <p>
-                Price: ${item.price}<br>
-                Deposit: ${item.deposit}<br>
-                Installments: ${item.installments}<br>
-                Storage: ${item.storage}<br>
+                Price: P{item.price}<br>
+                Deposit: P{item.deposit}<br>
+                Installments: P{item.installments}<br>
+                Storage: {item.storage}<br>
                 Condition: Pre-owned, Refurbished
             </p>
             <button onclick="removeItem(${index})">Remove</button>
