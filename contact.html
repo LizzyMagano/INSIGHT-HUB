@@ -71,22 +71,12 @@ p {
 
   <!-- Go Back Button -->
   <button onclick="goBack()">← Go Back</button>
-
-  <!-- Logout Button -->
-  <button onclick="logout()">Logout 🔒</button>
 </div>
 
 <script>
 // Go Back function
 function goBack() {
   window.history.back();
-}
-
-// Logout function
-function logout() {
-  localStorage.removeItem("cart");
-  localStorage.removeItem("selectedLaptop");
-  window.location.href = "index.html";
 }
 </script>
 
