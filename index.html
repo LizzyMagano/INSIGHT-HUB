@@ -8,25 +8,28 @@
 <style>
 body { 
   font-family: Arial, sans-serif; 
-  text-align: center; 
   margin: 0; 
   padding: 0; 
-  background: white; 
-  color: #b30000; 
-  min-height: 100vh; 
-  overflow-x: hidden; 
+  color: white;
 }
 
-/* Hero Image */
-.hero img {
-  width: 100%;
-  max-height: 250px;
-  object-fit: cover;
+/* Background Image Section */
+.hero {
+  height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+              url('laptop.jpg'); /* replace with your image */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
+/* Content Styling */
 h1 {
-  font-size: 2.5rem; 
-  margin-top: 20px; 
+  font-size: 2.8rem; 
   animation: pulse 2.5s infinite;
 }
 
@@ -38,18 +41,17 @@ h1 {
 
 p {
   font-size: 1.2rem;
-  margin: 15px 0 30px 0;
+  margin: 10px 0 20px 0;
 }
 
 .container {
   max-width: 500px;
-  margin: auto;
   padding: 20px;
 }
 
 a.button {
   display: block;
-  margin: 12px auto;
+  margin: 10px auto;
   padding: 12px;
   width: 220px;
   text-decoration: none;
@@ -67,16 +69,9 @@ a.button:hover {
   transform: scale(1.05);
 }
 
-/* Highlight Browse button */
-a.button[href="browse.html"] {
-  background: #e60000;
-  box-shadow: 0 0 15px rgba(230,0,0,0.6);
-}
-
 #notify {
-  margin-top: 20px;
+  margin-top: 15px;
   font-weight: bold;
-  color: #b30000;
 }
 
 button.logout {
@@ -86,8 +81,7 @@ button.logout {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 25px;
-  font-size: 1rem;
+  margin-top: 20px;
   transition: 0.3s;
 }
 
@@ -95,30 +89,26 @@ button.logout:hover {
   background: white;
   color: #b30000;
   border: 2px solid #b30000;
-  transform: scale(1.05);
 }
 </style>
 </head>
+
 <body>
 
-<!-- Image Section -->
 <div class="hero">
-  <img src="background.jpg" alt="Laptop Banner">
-</div>
+  <div class="container">
+    <h1>Insight Hive Laptops</h1>
+    <p>Student-Friendly Laptop Hire Purchase</p>
+    <p><strong>All laptops are pre-owned and refurbished ✔️</strong></p>
 
-<div class="container">
-  <h1>Insight Hive Laptops</h1>
-  <p>Student-Friendly Laptop Hire Purchase – pay deposit, then small monthly payments</p>
-  <p><strong>All laptops are pre-owned and refurbished ✔️</strong></p>
+    <a href="laptops.html" class="button">View Laptops</a>
+    <a href="cart.html" class="button">Cart</a>
+    <a href="form.html" class="button">Purchase now</a>
+    <a href="contact.html" class="button">Contact Us</a>
 
-  <!-- Hub Buttons -->
-  <a href="laptops.html" class="button">View Laptops</a>
-  <a href="cart.html" class="button">Cart</a>
-  <a href="form.html" class="button">Purchase now</a>
-  <a href="contact.html" class="button">Contact Us</a>
-
-  <p id="notify"></p>
-  <button class="logout" onclick="logout()">Logout 🔒</button>
+    <p id="notify"></p>
+    <button class="logout" onclick="logout()">Logout 🔒</button>
+  </div>
 </div>
 
 <script>
@@ -126,7 +116,7 @@ function checkUpdate() {
   let lastSeen = localStorage.getItem("lastSeenUpdate");
   let currentUpdate = "v1.0";
   if(lastSeen !== currentUpdate){
-    document.getElementById("notify").innerText = "✨ New laptops just added! Check Browse Laptops.";
+    document.getElementById("notify").innerText = "✨ New laptops just added!";
     localStorage.setItem("lastSeenUpdate", currentUpdate);
   }
 }
