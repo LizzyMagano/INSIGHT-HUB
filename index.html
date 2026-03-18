@@ -74,17 +74,6 @@ a.button:hover {
   font-weight: bold;
 }
 
-button.logout {
-  background: #b30000;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: 0.3s;
-}
-
 button.logout:hover {
   background: white;
   color: #b30000;
@@ -107,7 +96,7 @@ button.logout:hover {
     <a href="contact.html" class="button">Contact Us</a>
 
     <p id="notify"></p>
-    <button class="logout" onclick="logout()">Logout 🔒</button>
+   
   </div>
 </div>
 
@@ -122,11 +111,6 @@ function checkUpdate() {
 }
 checkUpdate();
 
-function logout() {
-  localStorage.removeItem("cart");
-  localStorage.removeItem("selectedLaptop");
-  window.location.href = "index.html";
-}
 </script>
 
 </body>
