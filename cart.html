@@ -4,15 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Cart</title>
+
 <style>
-body { font-family: Arial; text-align:center; margin:0; background:white; color:#b30000; }
-header { background:#b30000; color:white; padding:20px; }
-.cart-item { border:1px solid #eee; margin:15px; padding:15px; border-radius:10px; display:inline-block; width:250px; background:white; box-shadow:0 0 10px rgba(0,0,0,0.1);}
-.cart-item img { width:200px; height:auto; }
-button { margin:5px; padding:10px; background:#b30000; color:white; border:none; border-radius:6px; cursor:pointer;}
-button:hover { background:white; color:#b30000; border:2px solid #b30000; }
+body { 
+  font-family: Arial; 
+  margin:0; 
+  color:white;
+}
+
+/* Background */
+body::before {
+  content: "";
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+              url('laptop.jpg'); /* replace image */
+  background-size: cover;
+  background-position: center;
+  z-index:-1;
+}
+
+header { 
+  background:#b30000; 
+  color:white; 
+  padding:20px; 
+}
+
+.cart-item { 
+  border:1px solid rgba(255,255,255,0.2); 
+  margin:15px; 
+  padding:15px; 
+  border-radius:10px; 
+  display:inline-block; 
+  width:250px; 
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
+.cart-item img { 
+  width:200px; 
+  height:auto; 
+  border-radius:8px;
+}
+
+button { 
+  margin:5px; 
+  padding:10px; 
+  background:#b30000; 
+  color:white; 
+  border:none; 
+  border-radius:6px; 
+  cursor:pointer;
+}
+
+button:hover { 
+  background:white; 
+  color:#b30000; 
+  border:2px solid #b30000; 
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -25,7 +81,6 @@ button:hover { background:white; color:#b30000; border:2px solid #b30000; }
 <button onclick="checkout()">Checkout 🛒</button>
 
 <script>
-// Load cart from localStorage
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let cartDiv = document.getElementById("cart");
 
@@ -43,10 +98,10 @@ function renderCart() {
             <img src="${item.image}" alt="${item.name}">
             <h3>${item.name}</h3>
             <p>
-                Price: P{item.price}<br>
-                Deposit: P{item.deposit}<br>
-                Installments: P{item.installments}<br>
-                Storage: {item.storage}<br>
+                Price: P${item.price}<br>
+                Deposit: P${item.deposit}<br>
+                Installments: P${item.installments}<br>
+                Storage: ${item.storage}<br>
                 Condition: Pre-owned, Refurbished
             </p>
             <button onclick="removeItem(${index})">Remove</button>
@@ -55,17 +110,14 @@ function renderCart() {
     });
 }
 
-// Remove a laptop from cart
 function removeItem(index){
     cart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
 }
 
-// Go back to browse
 function goBack() { window.location.href = "browse.html"; }
 
-// Checkout (send to form page)
 function checkout() {
     if(cart.length === 0){
         alert("Your cart is empty!");
@@ -74,7 +126,6 @@ function checkout() {
     window.location.href = "form.html";
 }
 
-// Initial render
 renderCart();
 </script>
 
