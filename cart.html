@@ -9,6 +9,7 @@
 body { 
   font-family: Arial; 
   margin:0; 
+  text-align:center;
   color:white;
 }
 
@@ -21,7 +22,7 @@ body::before {
   width:100%;
   height:100%;
   background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-              url('laptop.jpg'); /* replace image */
+              url('laptop.jpg'); /* change image if needed */
   background-size: cover;
   background-position: center;
   z-index:-1;
@@ -33,6 +34,11 @@ header {
   padding:20px; 
 }
 
+#cart {
+  padding: 20px;
+}
+
+/* Cart Cards */
 .cart-item { 
   border:1px solid rgba(255,255,255,0.2); 
   margin:15px; 
@@ -51,20 +57,27 @@ header {
   border-radius:8px;
 }
 
+/* Buttons */
 button { 
-  margin:5px; 
-  padding:10px; 
+  margin:10px; 
+  padding:10px 15px; 
   background:#b30000; 
   color:white; 
   border:none; 
   border-radius:6px; 
   cursor:pointer;
+  font-weight: bold;
 }
 
 button:hover { 
   background:white; 
   color:#b30000; 
   border:2px solid #b30000; 
+}
+
+/* Bottom buttons layout */
+.actions {
+  margin: 20px;
 }
 </style>
 </head>
@@ -77,15 +90,20 @@ button:hover {
 
 <div id="cart"></div>
 
-<button onclick="goBack()">← View More</button>
-<button onclick="checkout()">Checkout 🛒</button>
+<div class="actions">
+  <button onclick="goBack()">← View More</button>
+  <button onclick="checkout()">Checkout 🛒</button>
+</div>
 
 <script>
+// Load cart
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let cartDiv = document.getElementById("cart");
 
+// Display cart
 function renderCart() {
     cartDiv.innerHTML = '';
+
     if(cart.length === 0){
         cartDiv.innerHTML = "<p>Cart is empty</p>";
         return;
@@ -94,6 +112,7 @@ function renderCart() {
     cart.forEach((item, index) => {
         let div = document.createElement("div");
         div.className = "cart-item";
+
         div.innerHTML = `
             <img src="${item.image}" alt="${item.name}">
             <h3>${item.name}</h3>
@@ -106,18 +125,24 @@ function renderCart() {
             </p>
             <button onclick="removeItem(${index})">Remove</button>
         `;
+
         cartDiv.appendChild(div);
     });
 }
 
+// Remove item
 function removeItem(index){
     cart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
 }
 
-function goBack() { window.location.href = "browse.html"; }
+// FIXED: correct page link
+function goBack() { 
+    window.location.href = "laptops.html"; 
+}
 
+// Checkout
 function checkout() {
     if(cart.length === 0){
         alert("Your cart is empty!");
@@ -126,6 +151,7 @@ function checkout() {
     window.location.href = "form.html";
 }
 
+// Run on load
 renderCart();
 </script>
 
