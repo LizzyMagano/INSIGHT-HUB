@@ -4,18 +4,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Browse Laptops</title>
+
 <style>
 body { font-family: Arial; margin:0; background:white; color:#b30000; text-align:center; }
 header { background:#b30000; color:white; padding:20px; }
 nav ul { list-style:none; display:flex; justify-content:center; gap:15px; padding:0; }
 nav a { color:white; text-decoration:none; font-weight:bold; }
-.laptop-card { border:1px solid #eee; margin:15px; padding:15px; width:250px; display:inline-block; border-radius:10px; background:white; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+
+.laptop-card {
+  border:1px solid #eee;
+  margin:15px;
+  padding:15px;
+  width:250px;
+  display:inline-block;
+  border-radius:10px;
+  background:white;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
 .laptop-card img { width:200px; height:auto; }
-button { margin:5px; padding:10px; background:#b30000; color:white; border:none; border-radius:6px; cursor:pointer; }
-button:hover { background:white; color:#b30000; border:2px solid #b30000; }
-.note { font-weight:bold; color:#b30000; margin:15px 0; }
+
+button {
+  margin:5px;
+  padding:10px;
+  background:#b30000;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover {
+  background:white;
+  color:#b30000;
+  border:2px solid #b30000;
+}
+
+.note { font-weight:bold; margin:15px 0; }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -33,109 +61,63 @@ button:hover { background:white; color:#b30000; border:2px solid #b30000; }
 <main>
 <p class="note">All laptops are pre-owned, refurbished, and fully tested ✔️</p>
 
-<!-- Laptop 1 -->
-<div class="laptop-card" data-name="Dell Inspiron 15" data-price="P4200" data-deposit="P1500" data-installments="5 × 540" data-storage="256GB SSD" data-image="dell.jpg">
-<img src="dell.jpg" alt="Dell Inspiron 15">
-<h3>Dell Inspiron 15</h3>
-<p>Price: P4200<br>Deposit: P1500<br>Installments: 5 × 540<br>Storage: 256GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
+<!-- CONTAINER FOR ALL LAPTOPS -->
+<div id="laptop-listings"></div>
 
-<!-- Laptop 2 -->
-<div class="laptop-card" data-name="HP Pavilion 14" data-price="P6000" data-deposit="P2000" data-installments="5 × 800" data-storage="512GB SSD" data-image="hp.jpg">
-<img src="hp.jpg" alt="HP Pavilion 14">
-<h3>HP Pavilion 14</h3>
-<p>Price: P6000<br>Deposit: P2000<br>Installments: 5 × 800<br>Storage: 512GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
-
-<!-- Laptop 3 -->
-<div class="laptop-card" data-name="Lenovo ThinkPad E14" data-price="P5500" data-deposit="P1600" data-installments="5 × 780" data-storage="256GB SSD" data-image="lenovo.jpg">
-<img src="lenovo.jpg" alt="Lenovo ThinkPad E14">
-<h3>Lenovo ThinkPad E14</h3>
-<p>Price: P5500<br>Deposit: P1600<br>Installments: 5 × 780<br>Storage: 256GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
-
-<!-- Laptop 4 -->
-<div class="laptop-card" data-name="MacBook Air" data-price="P8000" data-deposit="P2800" data-installments="5 × 1040" data-storage="256GB SSD" data-image="macbook.jpg">
-<img src="macbook.jpg" alt="MacBook Air">
-<h3>MacBook Air</h3>
-<p>Price: P8000<br>Deposit: P2800<br>Installments: 5 × 1040<br>Storage: 256GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
-
-<!-- Laptop 5 -->
-<div class="laptop-card" data-name="MacBook Air Alt" data-price="P7000" data-deposit="P2000" data-installments="5 × 1000" data-storage="512GB SSD" data-image="book.jpg">
-<img src="book.jpg" alt="MacBook Air Alt">
-<h3>MacBook Air (Alt)</h3>
-<p>Price: P7000<br>Deposit: P2000<br>Installments: 5 × 1000<br>Storage: 512GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
-
-<!-- Laptop 6 -->
-<div class="laptop-card" data-name="Acer" data-price="P3500" data-deposit="P1000" data-installments="5 × 500" data-storage="128GB SSD" data-image="cer.jpg">
-<img src="cer.jpg" alt="Acer Laptop">
-<h3>Acer</h3>
-<p>Price: P3500<br>Deposit: P1000<br>Installments: 5 × 500<br>Storage: 128GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
-
-<!-- Laptop 7 -->
-<div class="laptop-card" data-name="HP Intel Core i3" data-price="P4500" data-deposit="P1500" data-installments="5 × 600" data-storage="256GB SSD" data-image="core.jpg">
-<img src="core.jpg" alt="HP Intel Core i3">
-<h3>HP Intel Core i3</h3>
-<p>Price: P4500<br>Deposit: P1500<br>Installments: 5 × 600<br>Storage: 256GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
-
-<!-- Laptop 8 -->
-<div class="laptop-card" data-name="Dell Laptop" data-price="P4000" data-deposit="P1200" data-installments="5 × 560" data-storage="128GB SSD" data-image="lap.jpg">
-<img src="lap.jpg" alt="Dell Laptop">
-<h3>Dell</h3>
-<p>Price: P4000<br>Deposit: P1200<br>Installments: 5 × 560<br>Storage: 128GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
-
-<!-- Laptop 9 -->
-<div class="laptop-card" data-name="MacBook Air Pro" data-price="P7500" data-deposit="P2500" data-installments="5 × 1000" data-storage="512GB SSD" data-image="mac.jpg">
-<img src="mac.jpg" alt="MacBook Air Pro">
-<h3>MacBook Air Pro</h3>
-<p>Price: P7500<br>Deposit: P2500<br>Installments: 5 × 1000<br>Storage: 512GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
-
-<!-- Laptop 10 -->
-<div class="laptop-card" data-name="Lenovo Laptop" data-price="P5500" data-deposit="P1600" data-installments="5 × 780" data-storage="256GB SSD" data-image="novo.jpg">
-<img src="novo.jpg" alt="Lenovo Laptop">
-<h3>Lenovo</h3>
-<p>Price: P5500<br>Deposit: P1600<br>Installments: 5 × 780<br>Storage: 256GB SSD<br><strong>Condition:</strong> Pre-owned, Refurbished</p>
-<button onclick="buyNow(this)">Buy Now</button>
-<button onclick="addToCart(this)">Add to Cart</button>
-</div>
-
-<!-- Go Back  -->
+<!-- Go Back Button -->
 <button onclick="goBack()">← Go Back</button>
+</main>
 
 <script>
+// === HARDCODED EXISTING LAPTOPS ===
+const existingLaptops = [
+  {name:"Dell Inspiron 15", price:"4200", condition:"Pre-owned, Refurbished", image:"dell.jpg"},
+  {name:"HP Pavilion 14", price:"6000", condition:"Pre-owned, Refurbished", image:"hp.jpg"},
+  {name:"Lenovo ThinkPad E14", price:"5500", condition:"Pre-owned, Refurbished", image:"lenovo.jpg"},
+  {name:"MacBook Air", price:"8000", condition:"Pre-owned, Refurbished", image:"macbook.jpg"},
+  {name:"MacBook Air Alt", price:"7000", condition:"Pre-owned, Refurbished", image:"book.jpg"},
+  {name:"Acer", price:"3500", condition:"Pre-owned, Refurbished", image:"cer.jpg"},
+  {name:"HP Intel Core i3", price:"4500", condition:"Pre-owned, Refurbished", image:"core.jpg"},
+  {name:"Dell Laptop", price:"4000", condition:"Pre-owned, Refurbished", image:"lap.jpg"},
+  {name:"MacBook Air Pro", price:"7500", condition:"Pre-owned, Refurbished", image:"mac.jpg"},
+  {name:"Lenovo Laptop", price:"5500", condition:"Pre-owned, Refurbished", image:"novo.jpg"}
+];
+
+// === GET SELLER-ADDED LAPTOPS ===
+const sellerLaptops = JSON.parse(localStorage.getItem("laptops")) || [];
+
+// === MERGE BOTH ARRAYS ===
+const allLaptops = existingLaptops.concat(sellerLaptops);
+
+// === RENDER LAPTOPS ===
+const container = document.getElementById("laptop-listings");
+
+allLaptops.forEach(item => {
+  const div = document.createElement("div");
+  div.className = "laptop-card";
+
+  div.setAttribute("data-name", item.name);
+  div.setAttribute("data-price", item.price);
+  div.setAttribute("data-image", item.image);
+
+  div.innerHTML = `
+    <img src="${item.image}" alt="${item.name}">
+    <h3>${item.name}</h3>
+    <p>Price: P${item.price}<br><strong>Condition:</strong> ${item.condition}</p>
+    <button onclick="buyNow(this)">Buy Now</button>
+    <button onclick="addToCart(this)">Add to Cart</button>
+  `;
+
+  container.appendChild(div);
+});
+
+// === CART FUNCTION ===
 function addToCart(btn){
   let card = btn.closest(".laptop-card");
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let laptop = {
     name: card.dataset.name,
     price: card.dataset.price,
-    deposit: card.dataset.deposit,
-    installments: card.dataset.installments,
-    storage: card.dataset.storage,
     image: card.dataset.image
   };
   cart.push(laptop);
@@ -143,22 +125,20 @@ function addToCart(btn){
   alert(laptop.name + " added to cart");
 }
 
+// === BUY NOW FUNCTION ===
 function buyNow(btn){
   let card = btn.closest(".laptop-card");
   let laptop = {
     name: card.dataset.name,
     price: card.dataset.price,
-    deposit: card.dataset.deposit,
-    installments: card.dataset.installments,
-    storage: card.dataset.storage,
     image: card.dataset.image
   };
   localStorage.setItem("selectedLaptop", JSON.stringify(laptop));
   window.location.href = "form.html";
 }
 
+// === GO BACK ===
 function goBack() { window.history.back(); }
-
 </script>
 
 </body>
