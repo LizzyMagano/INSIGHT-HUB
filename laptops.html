@@ -20,6 +20,7 @@ nav a { color:white; text-decoration:none; font-weight:bold; }
   border-radius:10px;
   background:white;
   box-shadow:0 0 10px rgba(0,0,0,0.1);
+  position: relative;
 }
 
 .laptop-card img { width:200px; height:auto; }
@@ -41,6 +42,24 @@ button:hover {
 }
 
 .note { font-weight:bold; margin:15px 0; }
+
+.delete-btn {
+  position: absolute;
+  top:5px;
+  right:5px;
+  background:red;
+  color:white;
+  border:none;
+  padding:5px 8px;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+.delete-btn:hover {
+  background:white;
+  color:red;
+  border:1px solid red;
+}
 </style>
 </head>
 
@@ -61,7 +80,7 @@ button:hover {
 <main>
 <p class="note">All laptops are pre-owned, refurbished, and fully tested ✔️</p>
 
-<!-- CONTAINER FOR ALL LAPTOPS -->
+<!-- Container for all laptops -->
 <div id="laptop-listings"></div>
 
 <!-- Go Back Button -->
@@ -84,41 +103,66 @@ const existingLaptops = [
 ];
 
 // === GET SELLER-ADDED LAPTOPS ===
-const sellerLaptops = JSON.parse(localStorage.getItem("laptops")) || [];
+let sellerLaptops = JSON.parse(localStorage.getItem("laptops")) || [];
 
-// === MERGE BOTH ARRAYS ===
+// === MERGE BOTH ARRAYS FOR DISPLAY ===
 const allLaptops = existingLaptops.concat(sellerLaptops);
 
 // === RENDER LAPTOPS ===
 const container = document.getElementById("laptop-listings");
 
-allLaptops.forEach(item => {
-  const div = document.createElement("div");
-  div.className = "laptop-card";
+function renderLaptops() {
+  container.innerHTML = ""; // Clear first
 
-  div.setAttribute("data-name", item.name);
-  div.setAttribute("data-price", item.price);
-  div.setAttribute("data-image", item.image);
+  // Render existing laptops (no delete)
+  existingLaptops.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "laptop-card";
+    div.innerHTML = `
+      <img src="${item.image}" alt="${item.name}">
+      <h3>${item.name}</h3>
+      <p>Price: P${item.price}<br><strong>Condition:</strong> ${item.condition}</p>
+      <button onclick="buyNow(this)">Buy Now</button>
+      <button onclick="addToCart(this)">Add to Cart</button>
+    `;
+    container.appendChild(div);
+  });
 
-  div.innerHTML = `
-    <img src="${item.image}" alt="${item.name}">
-    <h3>${item.name}</h3>
-    <p>Price: P${item.price}<br><strong>Condition:</strong> ${item.condition}</p>
-    <button onclick="buyNow(this)">Buy Now</button>
-    <button onclick="addToCart(this)">Add to Cart</button>
-  `;
+  // Render seller-added laptops (with delete)
+  sellerLaptops.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "laptop-card";
+    div.setAttribute("data-index", index);
 
-  container.appendChild(div);
-});
+    div.innerHTML = `
+      <img src="${item.image}" alt="${item.name}">
+      <h3>${item.name}</h3>
+      <p>Price: P${item.price}<br><strong>Condition:</strong> ${item.condition}</p>
+      <button onclick="buyNow(this)">Buy Now</button>
+      <button onclick="addToCart(this)">Add to Cart</button>
+      <button class="delete-btn" onclick="deleteLaptop(${index})">Delete</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// === DELETE FUNCTION ===
+function deleteLaptop(index) {
+  if(confirm("Are you sure you want to delete this item?")) {
+    sellerLaptops.splice(index,1);
+    localStorage.setItem("laptops", JSON.stringify(sellerLaptops));
+    renderLaptops();
+  }
+}
 
 // === CART FUNCTION ===
 function addToCart(btn){
   let card = btn.closest(".laptop-card");
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let laptop = {
-    name: card.dataset.name,
-    price: card.dataset.price,
-    image: card.dataset.image
+    name: card.querySelector("h3").innerText,
+    price: card.querySelector("p").innerText.split("Price: P")[1].split("<")[0],
+    image: card.querySelector("img").src
   };
   cart.push(laptop);
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -129,9 +173,9 @@ function addToCart(btn){
 function buyNow(btn){
   let card = btn.closest(".laptop-card");
   let laptop = {
-    name: card.dataset.name,
-    price: card.dataset.price,
-    image: card.dataset.image
+    name: card.querySelector("h3").innerText,
+    price: card.querySelector("p").innerText.split("Price: P")[1].split("<")[0],
+    image: card.querySelector("img").src
   };
   localStorage.setItem("selectedLaptop", JSON.stringify(laptop));
   window.location.href = "form.html";
@@ -139,6 +183,9 @@ function buyNow(btn){
 
 // === GO BACK ===
 function goBack() { window.history.back(); }
+
+// Initial render
+renderLaptops();
 </script>
 
 </body>
