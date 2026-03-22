@@ -2,24 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seller & Laptops Page</title>
+  <title>Sell Gadget</title>
   <style>
     body { font-family: Arial; background:#f5f5f5; padding:20px; }
     .container { max-width:900px; margin:auto; }
-    .card { background:white; padding:15px; border-radius:10px; margin-bottom:20px; }
+    .card { background:white; padding:15px; border-radius:10px; }
     input, select { width:100%; padding:10px; margin:8px 0; }
     button { width:100%; padding:10px; background:#007bff; color:white; border:none; cursor:pointer; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; }
-    img { width:100%; height:150px; object-fit:cover; border-radius:6px; }
   </style>
 </head>
 <body>
 
 <div class="container">
+  <a href="index.html">← Back Home</a>
   <h1>Sell Your Gadget</h1>
 
-  <!-- FORM -->
   <div class="card">
     <input type="text" id="name" placeholder="Gadget Name">
     <input type="number" id="price" placeholder="Price">
@@ -36,34 +33,9 @@
 
     <button onclick="addItem()">Add Listing</button>
   </div>
-
-  <!-- LISTINGS -->
-  <h2>Available Laptops</h2>
-  <div class="grid" id="listings"></div>
 </div>
 
 <script>
-function loadItems() {
-  const listings = document.getElementById('listings');
-  listings.innerHTML = '';
-
-  const items = JSON.parse(localStorage.getItem('laptops')) || [];
-
-  items.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'card';
-
-    div.innerHTML = `
-      <img src="${item.image}">
-      <h3>${item.name}</h3>
-      <p><strong>Price:</strong> $${item.price}</p>
-      <p><strong>Condition:</strong> ${item.condition}</p>
-    `;
-
-    listings.appendChild(div);
-  });
-}
-
 function addItem() {
   const name = document.getElementById('name').value;
   const price = document.getElementById('price').value;
@@ -85,25 +57,17 @@ function addItem() {
       image: e.target.result
     };
 
+    // Save to shared storage
     let items = JSON.parse(localStorage.getItem('laptops')) || [];
     items.push(item);
     localStorage.setItem('laptops', JSON.stringify(items));
 
-    // refresh list instantly
-    loadItems();
+    // 🔥 Redirect to laptops page
+    window.location.href = "laptops.html";
   };
 
   reader.readAsDataURL(file);
-
-  // clear form
-  document.getElementById('name').value = '';
-  document.getElementById('price').value = '';
-  document.getElementById('condition').value = '';
-  document.getElementById('image').value = '';
 }
-
-// load on page start
-loadItems();
 </script>
 
 </body>
