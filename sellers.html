@@ -10,10 +10,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    body {
-      background: #f4f6fa;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    }
+    body { background: #f4f6fa; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     .container { max-width: 700px; margin: auto; padding: 20px; }
     .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
     .form-label { font-weight: 600; }
@@ -24,7 +21,6 @@
     .commission-box i { color: #b30000; font-size: 1.2rem; margin-right: 8px; }
     .preview-img { max-width: 200px; max-height: 200px; margin-top: 10px; border-radius: 8px; border: 1px solid #e9ecef; display: none; }
     .agreement-check { margin: 15px 0; }
-    .agreement-check label { font-weight: 400; }
     .text-danger { color: #b30000 !important; }
   </style>
 </head>
@@ -54,7 +50,7 @@
   <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2><i class="fas fa-plus-circle me-2"></i>Sell Your Laptop</h2>
-      <a href="laptops.html" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>View laptops</a>
+      <a href="shop.html" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Back to Shop</a>
     </div>
 
     <div class="card">
@@ -170,6 +166,10 @@
       <div id="submissionMessage" class="alert alert-success mt-3" style="display: none;">
         <i class="fas fa-check-circle me-2"></i> Laptop listed successfully! Redirecting to shop...
       </div>
+
+      <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;">
+        <i class="fas fa-exclamation-circle me-2"></i> <span id="errorText"></span>
+      </div>
     </div>
   </div>
 
@@ -182,8 +182,9 @@
     // ============================================================
     var SUPABASE_URL = "https://wmebpsheblrkuvygguae.supabase.co";
     var SUPABASE_ANON_KEY = "sb_publishable_rUkBj0Th3x6ZXGbPkLGsHQ_f5WG3jB_";
+    var SELLERS_TABLE = 'sellers';
     var LAPTOPS_TABLE = 'laptops';
-    var COMMISSION_RATE = 20; // 20%
+    var COMMISSION_RATE = 20;
 
     // ============================================================
     //  🖼️  PREVIEW IMAGE
@@ -202,7 +203,62 @@
     }
 
     // ============================================================
-    //  📤  ADD ITEM TO SUPABASE
+    //  📤  SAVE SELLER TO SUPABASE
+    // ============================================================
+    function saveSellerToSupabase(sellerData, callback) {
+      var url = SUPABASE_URL + '/rest/v1/' + SELLERS_TABLE;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Prefer', 'return=representation');
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200 || xhr.status === 201) {
+            try {
+              var data = JSON.parse(xhr.responseText);
+              callback({ success: true, data: data[0] });
+            } catch (e) {
+              callback({ success: false, error: 'Invalid response' });
+            }
+          } else {
+            callback({ success: false, error: xhr.status + ': ' + xhr.responseText });
+          }
+        }
+      };
+      xhr.send(JSON.stringify(sellerData));
+    }
+
+    // ============================================================
+    //  📤  SAVE LAPTOP TO SUPABASE
+    // ============================================================
+    function saveLaptopToSupabase(laptopData, callback) {
+      var url = SUPABASE_URL + '/rest/v1/' + LAPTOPS_TABLE;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Prefer', 'return=representation');
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200 || xhr.status === 201) {
+            callback({ success: true });
+          } else {
+            callback({ success: false, error: xhr.status + ': ' + xhr.responseText });
+          }
+        }
+      };
+      xhr.send(JSON.stringify(laptopData));
+    }
+
+    // ============================================================
+    //  📤  ADD ITEM (Seller + Laptop)
     // ============================================================
     function addItem() {
       var name = document.getElementById('name').value.trim();
@@ -244,74 +300,71 @@
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Listing...';
 
+      document.getElementById('errorMessage').style.display = 'none';
+
       var reader = new FileReader();
       reader.onload = function(e) {
         var imageData = e.target.result;
 
-        var laptopData = {
-          name: name,
-          price: parseFloat(price),
-          condition: condition,
-          image: imageData,
-          status: 'available',
+        // Step 1: Save seller details
+        var sellerData = {
           seller_name: sellerName,
           seller_email: sellerEmail,
           seller_phone: sellerPhone,
           bank_name: bankName,
-          account_number: accountNumber,
           account_holder: accountHolder,
-          branch_code: branchCode,
+          account_number: accountNumber,
+          branch_code: branchCode || '',
           commission_rate: COMMISSION_RATE
         };
 
-        saveToSupabase(laptopData);
+        saveSellerToSupabase(sellerData, function(sellerResult) {
+          if (!sellerResult.success) {
+            var errorMsg = document.getElementById('errorText');
+            errorMsg.textContent = 'Failed to save seller: ' + (sellerResult.error || 'Unknown error');
+            document.getElementById('errorMessage').style.display = 'block';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
+            return;
+          }
+
+          var sellerId = sellerResult.data.id;
+          console.log('✅ Seller saved with ID:', sellerId);
+
+          // Step 2: Save laptop with seller_id
+          var laptopData = {
+            name: name,
+            price: parseFloat(price),
+            condition: condition,
+            image: imageData,
+            status: 'available',
+            seller_id: sellerId,
+            commission_rate: COMMISSION_RATE
+          };
+
+          saveLaptopToSupabase(laptopData, function(laptopResult) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
+
+            if (laptopResult.success) {
+              var msg = document.getElementById('submissionMessage');
+              msg.style.display = 'block';
+
+              document.getElementById('sellForm').reset();
+              document.getElementById('preview').style.display = 'none';
+
+              setTimeout(function() {
+                window.location.href = 'shop.html';
+              }, 2000);
+            } else {
+              var errorMsg = document.getElementById('errorText');
+              errorMsg.textContent = 'Failed to save laptop: ' + (laptopResult.error || 'Unknown error');
+              document.getElementById('errorMessage').style.display = 'block';
+            }
+          });
+        });
       };
       reader.readAsDataURL(file);
-    }
-
-    // ============================================================
-    //  📥  SAVE TO SUPABASE
-    // ============================================================
-    function saveToSupabase(data) {
-      var url = SUPABASE_URL + '/rest/v1/' + LAPTOPS_TABLE;
-
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', url, true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
-      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
-      xhr.setRequestHeader('Prefer', 'return=representation');
-
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-          var btn = document.querySelector('.btn-primary');
-          btn.disabled = false;
-          btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
-
-          if (xhr.status === 200 || xhr.status === 201) {
-            var msg = document.getElementById('submissionMessage');
-            msg.style.display = 'block';
-
-            document.getElementById('sellForm').reset();
-            document.getElementById('preview').style.display = 'none';
-
-            setTimeout(function() {
-              window.location.href = 'shop.html';
-            }, 2000);
-          } else {
-            alert('❌ Failed to list laptop. Please try again.\n\nError: ' + xhr.status + ': ' + xhr.responseText);
-          }
-        }
-      };
-
-      xhr.onerror = function() {
-        var btn = document.querySelector('.btn-primary');
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
-        alert('❌ Network error. Please check your internet connection.');
-      };
-
-      xhr.send(JSON.stringify(data));
     }
   </script>
 
