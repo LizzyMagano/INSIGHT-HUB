@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sell Gadget · TechLap Store</title>
+  <title>Sell Your Laptop · TechLap Store</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
@@ -13,50 +13,19 @@
     body {
       background: #f4f6fa;
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      padding: 20px;
     }
-    .container {
-      max-width: 600px;
-      margin: auto;
-    }
-    .card {
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-    .form-label {
-      font-weight: 600;
-    }
-    .btn-primary {
-      background: #b30000;
-      border: none;
-      padding: 12px;
-      font-weight: 600;
-    }
-    .btn-primary:hover {
-      background: #8f0000;
-    }
-    .btn-secondary {
-      background: #6c757d;
-      border: none;
-      padding: 12px;
-      font-weight: 600;
-    }
-    .btn-secondary:hover {
-      background: #5a6268;
-    }
-    .navbar-brand i {
-      color: #b30000;
-    }
-    .preview-img {
-      max-width: 200px;
-      max-height: 200px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: 1px solid #e9ecef;
-      display: none;
-    }
+    .container { max-width: 700px; margin: auto; padding: 20px; }
+    .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .form-label { font-weight: 600; }
+    .btn-primary { background: #b30000; border: none; padding: 12px; font-weight: 600; }
+    .btn-primary:hover { background: #8f0000; }
+    .navbar-brand i { color: #b30000; }
+    .commission-box { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 10px; margin: 15px 0; }
+    .commission-box i { color: #b30000; font-size: 1.2rem; margin-right: 8px; }
+    .preview-img { max-width: 200px; max-height: 200px; margin-top: 10px; border-radius: 8px; border: 1px solid #e9ecef; display: none; }
+    .agreement-check { margin: 15px 0; }
+    .agreement-check label { font-weight: 400; }
+    .text-danger { color: #b30000 !important; }
   </style>
 </head>
 
@@ -65,35 +34,42 @@
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html">
-        <i class="fas fa-laptop me-2"></i>TechLap Store
-      </a>
+      <a class="navbar-brand fw-bold" href="index.html"><i class="fas fa-laptop me-2"></i>TechLap Store</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
           <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+          <li class="nav-item"><a class="nav-link active" href="sell.html">Sell</a></li>
           <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
-          <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
   <!-- SELL FORM -->
-  <div class="container my-5">
+  <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2><i class="fas fa-plus-circle me-2"></i>Sell Your Gadget</h2>
-      <a href="shop.html" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i>Back to Shop</a>
+      <h2><i class="fas fa-plus-circle me-2"></i>Sell Your Laptop</h2>
+      <a href="shop.html" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Back to Shop</a>
     </div>
 
     <div class="card">
+      <!-- Commission Notice -->
+      <div class="commission-box">
+        <i class="fas fa-info-circle"></i>
+        <strong>Commission: 20%</strong> - When your laptop sells, we'll deduct 20% commission and send the remaining <strong>80%</strong> to your bank account.
+      </div>
+
       <form id="sellForm" onsubmit="return false;">
+        <!-- Product Details -->
+        <h5 class="mt-3 mb-3"><i class="fas fa-laptop me-2"></i>Product Details</h5>
+
         <div class="mb-3">
-          <label for="name" class="form-label">Gadget Name <span class="text-danger">*</span></label>
+          <label for="name" class="form-label">Laptop Name <span class="text-danger">*</span></label>
           <input type="text" class="form-control" id="name" placeholder="e.g. Dell Inspiron 15" required>
         </div>
 
@@ -119,31 +95,95 @@
           <img id="preview" class="preview-img" alt="Preview">
         </div>
 
-        <button type="button" class="btn btn-primary w-100" onclick="addItem()">
-          <i class="fas fa-plus-circle me-2"></i>Add Listing
+        <hr>
+
+        <!-- Seller Details -->
+        <h5 class="mt-3 mb-3"><i class="fas fa-user me-2"></i>Your Details</h5>
+
+        <div class="mb-3">
+          <label for="sellerName" class="form-label">Full Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="sellerName" placeholder="Your full name" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="sellerEmail" class="form-label">Email Address <span class="text-danger">*</span></label>
+          <input type="email" class="form-control" id="sellerEmail" placeholder="you@example.com" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="sellerPhone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+          <input type="tel" class="form-control" id="sellerPhone" placeholder="+267 78 549 270" required>
+        </div>
+
+        <hr>
+
+        <!-- Banking Details -->
+        <h5 class="mt-3 mb-3"><i class="fas fa-university me-2"></i>Banking Details (For Payout)</h5>
+
+        <div class="mb-3">
+          <label for="bankName" class="form-label">Bank Name <span class="text-danger">*</span></label>
+          <select class="form-select" id="bankName" required>
+            <option value="">Select bank...</option>
+            <option value="Barclays Bank Botswana">Barclays Bank Botswana</option>
+            <option value="First National Bank">First National Bank (FNB)</option>
+            <option value="Standard Chartered">Standard Chartered</option>
+            <option value="ABSA Bank Botswana">ABSA Bank Botswana</option>
+            <option value="Bank Gaborone">Bank Gaborone</option>
+            <option value="BancABC">BancABC</option>
+            <option value="Capital Bank">Capital Bank</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="accountHolder" class="form-label">Account Holder Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="accountHolder" placeholder="Name on the account" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="accountNumber" class="form-label">Account Number <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="accountNumber" placeholder="Your account number" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="branchCode" class="form-label">Branch Code</label>
+          <input type="text" class="form-control" id="branchCode" placeholder="Branch code (optional)">
+        </div>
+
+        <hr>
+
+        <!-- Agreement -->
+        <div class="agreement-check">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="agreement" required>
+            <label class="form-check-label" for="agreement">
+              I agree to <strong>20% commission</strong> on the sale price. I understand that after the laptop sells, <strong>80%</strong> of the sale price will be transferred to my bank account.
+            </label>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary w-100 mt-3" onclick="addItem()">
+          <i class="fas fa-plus-circle me-2"></i>List My Laptop
         </button>
       </form>
 
       <div id="submissionMessage" class="alert alert-success mt-3" style="display: none;">
-        <i class="fas fa-check-circle me-2"></i> Laptop added successfully! Redirecting to shop...
+        <i class="fas fa-check-circle me-2"></i> Laptop listed successfully! Redirecting to shop...
       </div>
     </div>
   </div>
 
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- ========================================== -->
-  <!-- SUPABASE CONFIGURATION                     -->
-  <!-- ========================================== -->
   <script>
     // ============================================================
     //  🔧  SUPABASE CONFIGURATION
     // ============================================================
     var SUPABASE_URL = "https://wmebpsheblrkuvygguae.supabase.co";
     var SUPABASE_ANON_KEY = "sb_publishable_rUkBj0Th3x6ZXGbPkLGsHQ_f5WG3jB_";
-    var LAPTOPS_TABLE = 'laptops'; // You'll need to create this table
+    var LAPTOPS_TABLE = 'laptops';
+    var COMMISSION_RATE = 20; // 20%
 
     // ============================================================
     //  🖼️  PREVIEW IMAGE
@@ -169,33 +209,61 @@
       var price = document.getElementById('price').value.trim();
       var condition = document.getElementById('condition').value;
       var file = document.getElementById('image').files[0];
+      var sellerName = document.getElementById('sellerName').value.trim();
+      var sellerEmail = document.getElementById('sellerEmail').value.trim();
+      var sellerPhone = document.getElementById('sellerPhone').value.trim();
+      var bankName = document.getElementById('bankName').value;
+      var accountHolder = document.getElementById('accountHolder').value.trim();
+      var accountNumber = document.getElementById('accountNumber').value.trim();
+      var branchCode = document.getElementById('branchCode').value.trim();
+      var agreement = document.getElementById('agreement').checked;
 
       // Validate
       if (!name || !price || !condition || !file) {
-        alert('⚠️ Please fill in all fields and select an image.');
+        alert('⚠️ Please fill in all product details.');
+        return;
+      }
+
+      if (!sellerName || !sellerEmail || !sellerPhone) {
+        alert('⚠️ Please enter your contact details.');
+        return;
+      }
+
+      if (!bankName || !accountHolder || !accountNumber) {
+        alert('⚠️ Please enter your banking details.');
+        return;
+      }
+
+      if (!agreement) {
+        alert('⚠️ You must agree to the 20% commission terms.');
         return;
       }
 
       // Show loading
       var btn = document.querySelector('.btn-primary');
-      var originalText = btn.innerHTML;
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Adding...';
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Listing...';
 
-      // Read image as base64
       var reader = new FileReader();
       reader.onload = function(e) {
         var imageData = e.target.result;
 
-        // Prepare data for Supabase
         var laptopData = {
           name: name,
           price: parseFloat(price),
           condition: condition,
-          image: imageData // base64 image
+          image: imageData,
+          status: 'available',
+          seller_name: sellerName,
+          seller_email: sellerEmail,
+          seller_phone: sellerPhone,
+          bank_name: bankName,
+          account_number: accountNumber,
+          account_holder: accountHolder,
+          branch_code: branchCode,
+          commission_rate: COMMISSION_RATE
         };
 
-        // Save to Supabase
         saveToSupabase(laptopData);
       };
       reader.readAsDataURL(file);
@@ -218,25 +286,20 @@
         if (xhr.readyState === 4) {
           var btn = document.querySelector('.btn-primary');
           btn.disabled = false;
-          btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add Listing';
+          btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
 
           if (xhr.status === 200 || xhr.status === 201) {
-            // Show success message
             var msg = document.getElementById('submissionMessage');
             msg.style.display = 'block';
 
-            // Reset form
             document.getElementById('sellForm').reset();
             document.getElementById('preview').style.display = 'none';
 
-            // Redirect after 2 seconds
             setTimeout(function() {
               window.location.href = 'shop.html';
             }, 2000);
           } else {
-            var errorMsg = 'Status ' + xhr.status + ': ' + xhr.responseText;
-            console.error('❌ Supabase error:', errorMsg);
-            alert('❌ Failed to add laptop. Please try again.\n\nError: ' + errorMsg);
+            alert('❌ Failed to list laptop. Please try again.\n\nError: ' + xhr.status + ': ' + xhr.responseText);
           }
         }
       };
@@ -244,7 +307,7 @@
       xhr.onerror = function() {
         var btn = document.querySelector('.btn-primary');
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add Listing';
+        btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
         alert('❌ Network error. Please check your internet connection.');
       };
 
@@ -255,5 +318,4 @@
 </body>
 
 </html>
-
 
