@@ -2,13 +2,11 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop · TechLap Store</title>
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Font Awesome 6 -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body {
       background: #f4f6fa;
@@ -51,49 +49,12 @@
     .btn-success:hover {
       background: #15803d;
     }
-    .btn-danger {
-      background: #dc3545;
-      border: none;
-    }
-    .btn-danger:hover {
-      background: #bb2d3b;
-    }
     .card {
       height: 100%;
       transition: transform 0.2s ease;
     }
     .card:hover {
       transform: translateY(-4px);
-    }
-    .card-body {
-      flex: 1 1 auto;
-    }
-    .card-img-top {
-      min-height: 220px;
-    }
-    .form-control:focus,
-    .form-select:focus {
-      border-color: #b30000;
-      box-shadow: 0 0 0 0.2rem rgba(179, 0, 0, 0.25);
-    }
-    .loading-spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 0.8s ease-in-out infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-    .navbar-brand i {
-      color: #b30000;
     }
     .badge-condition {
       background: #e9ecef;
@@ -102,29 +63,6 @@
       font-size: 0.7rem;
       padding: 3px 10px;
       border-radius: 60px;
-    }
-    .delete-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 10;
-      background: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      font-size: 0.7rem;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-    .laptop-card:hover .delete-btn {
-      display: flex;
-    }
-    .delete-btn:hover {
-      background: #bb2d3b;
     }
     .seller-badge {
       position: absolute;
@@ -137,6 +75,40 @@
       border-radius: 60px;
       opacity: 0.8;
     }
+    .sold-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.3rem;
+      z-index: 20;
+      letter-spacing: 2px;
+    }
+    .sold-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 15;
+      border-radius: 8px;
+    }
+    .laptop-card {
+      position: relative;
+    }
+    .navbar-brand i {
+      color: #b30000;
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
@@ -145,9 +117,7 @@
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html">
-        <i class="fas fa-laptop me-2"></i>TechLap Store
-      </a>
+      <a class="navbar-brand fw-bold" href="index.html"><i class="fas fa-laptop me-2"></i>TechLap Store</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -171,13 +141,13 @@
   <div class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h3><i class="fas fa-laptop me-2"></i>Browse Laptops</h3>
-      <span class="badge bg-secondary"><i class="fas fa-box me-1"></i> <span id="productCount">0</span> laptops</span>
+      <a href="sell.html" class="btn btn-primary btn-sm"><i class="fas fa-plus-circle me-1"></i>Sell Yours</a>
     </div>
     <p class="text-muted small mb-3"><i class="fas fa-check-circle text-success me-1"></i> All laptops are pre-owned, refurbished, and fully tested ✔️</p>
     <div id="shop" class="row"></div>
   </div>
 
-  <!-- BUY NOW MODAL -->
+  <!-- BUY MODAL -->
   <div class="modal fade" id="buyNowModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -197,7 +167,6 @@
             <div class="mb-3">
               <label for="customerEmail" class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
               <input type="email" id="customerEmail" class="form-control" placeholder="you@example.com" required>
-              <div class="form-text">We'll send order confirmation here.</div>
             </div>
             <div class="mb-3">
               <label for="customerPhone" class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
@@ -218,6 +187,8 @@
               </select>
             </div>
             <input type="hidden" id="buyProductIndex" value="" />
+            <input type="hidden" id="buyProductId" value="" />
+            <input type="hidden" id="buySellerId" value="" />
           </form>
         </div>
         <div class="modal-footer">
@@ -230,25 +201,18 @@
     </div>
   </div>
 
-  <!-- ORDER CONFIRMATION TOAST -->
+  <!-- TOAST -->
   <div class="toast-container">
     <div id="orderToast" class="toast align-items-center text-white border-0" role="alert" style="background: #1e293b;">
       <div class="d-flex">
-        <div class="toast-body" id="toastMessage">
-          <i class="fas fa-check-circle text-success me-2"></i> Order placed successfully!
-        </div>
+        <div class="toast-body" id="toastMessage"><i class="fas fa-check-circle text-success me-2"></i> Order placed!</div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
       </div>
     </div>
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- ========================================== -->
-  <!-- SHOP LOGIC                                 -->
-  <!-- ========================================== -->
   <script>
     // ============================================================
     //  🔧  SUPABASE CONFIGURATION
@@ -256,37 +220,26 @@
     var SUPABASE_URL = "https://wmebpsheblrkuvygguae.supabase.co";
     var SUPABASE_ANON_KEY = "sb_publishable_rUkBj0Th3x6ZXGbPkLGsHQ_f5WG3jB_";
     var ORDERS_TABLE = 'shop_orders';
+    var LAPTOPS_TABLE = 'laptops';
+    var SELLERS_TABLE = 'sellers';
 
     // ============================================================
     //  📦  LAPTOP DATA
     // ============================================================
     var existingLaptops = [
-      { name: "Dell Inspiron 15", price: 4200, condition: "Pre-owned, Refurbished", image: "dell.jpg" },
-      { name: "HP Pavilion 14", price: 6000, condition: "Pre-owned, Refurbished", image: "hp.jpg" },
-      { name: "Lenovo ThinkPad E14", price: 5500, condition: "Pre-owned, Refurbished", image: "lenovo.jpg" },
-      { name: "MacBook Air", price: 8000, condition: "Pre-owned, Refurbished", image: "macbook.jpg" },
-      { name: "MacBook Air Alt", price: 7000, condition: "Pre-owned, Refurbished", image: "book.jpg" },
-      { name: "Acer Aspire", price: 3500, condition: "Pre-owned, Refurbished", image: "acer.jpg" },
-      { name: "HP Intel Core i3", price: 4500, condition: "Pre-owned, Refurbished", image: "core.jpg" },
-      { name: "Dell Latitude", price: 4000, condition: "Pre-owned, Refurbished", image: "lap.jpg" },
-      { name: "MacBook Pro", price: 7500, condition: "Pre-owned, Refurbished", image: "mac.jpg" },
-      { name: "Lenovo Yoga", price: 5500, condition: "Pre-owned, Refurbished", image: "novo.jpg" }
+      { id: null, name: "Dell Inspiron 15", price: 4200, condition: "Pre-owned, Refurbished", image: "dell.jpg", isSeller: false, status: 'available' },
+      { id: null, name: "HP Pavilion 14", price: 6000, condition: "Pre-owned, Refurbished", image: "hp.jpg", isSeller: false, status: 'available' },
+      { id: null, name: "Lenovo ThinkPad E14", price: 5500, condition: "Pre-owned, Refurbished", image: "lenovo.jpg", isSeller: false, status: 'available' },
+      { id: null, name: "MacBook Air", price: 8000, condition: "Pre-owned, Refurbished", image: "macbook.jpg", isSeller: false, status: 'available' },
+      { id: null, name: "Acer Aspire", price: 3500, condition: "Pre-owned, Refurbished", image: "acer.jpg", isSeller: false, status: 'available' }
     ];
 
-    // Get seller-added laptops from localStorage
-    var sellerLaptops = JSON.parse(localStorage.getItem("laptops")) || [];
-
-    // Merge both arrays
-    var allLaptops = existingLaptops.concat(sellerLaptops);
-
-    // ============================================================
-    //  🛒  CART FUNCTIONS
-    // ============================================================
+    var sellerLaptops = [];
+    var allLaptops = [];
     var cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     function updateCartButton() {
-      var count = cart.length;
-      document.getElementById('cartCount').textContent = count;
+      document.getElementById('cartCount').textContent = cart.length;
     }
 
     function showToast(msg, isError) {
@@ -298,71 +251,76 @@
       toast.show();
     }
 
-    function addToCart(index) {
-      var laptop = allLaptops[index];
-      if (!laptop) return;
+    // ============================================================
+    //  📥  FETCH SELLER LAPTOPS FROM SUPABASE
+    // ============================================================
+    function fetchSellerLaptops(callback) {
+      var url = SUPABASE_URL + '/rest/v1/' + LAPTOPS_TABLE;
 
-      var cartItem = {
-        name: laptop.name,
-        price: laptop.price,
-        image: laptop.image,
-        condition: laptop.condition,
-        cartId: Date.now() + Math.random()
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            sellerLaptops = data.map(function(item) {
+              return {
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                condition: item.condition,
+                image: item.image || 'https://via.placeholder.com/300x220?text=No+Image',
+                isSeller: true,
+                status: item.status || 'available',
+                seller_id: item.seller_id || null,
+                commission_rate: item.commission_rate || 20
+              };
+            });
+          } catch (e) { sellerLaptops = []; }
+          callback();
+        } else {
+          sellerLaptops = [];
+          callback();
+        }
       };
-      cart.push(cartItem);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCartButton();
-      showToast('🛒 "' + laptop.name + '" added to cart!');
+      xhr.send();
     }
 
     // ============================================================
-    //  📧  SEND ORDER NOTIFICATION VIA EMAILJS
+    //  🔍  GET SELLER DETAILS
     // ============================================================
-    function sendOrderNotification(orderData) {
-      var script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
-      script.onload = function() {
-        emailjs.init('p1SkBpAIthT5H_oqV');
+    function getSellerDetails(sellerId, callback) {
+      var url = SUPABASE_URL + '/rest/v1/' + SELLERS_TABLE + '?id=eq.' + sellerId;
 
-        var orderDate = new Date(orderData.ordered_at);
-        var formattedDate = orderDate.toLocaleDateString('en-BW', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
 
-        var templateParams = {
-          order_id: orderData.id || 'N/A',
-          customer_name: orderData.customer_name,
-          customer_email: orderData.customer_email,
-          product_name: orderData.product_name,
-          price: orderData.price.toFixed(2),
-          color: orderData.color || 'N/A',
-          size: orderData.size || 'N/A',
-          service_method: orderData.service_method,
-          ordered_at: formattedDate,
-          status: orderData.status,
-          store_name: "TechLap Store",
-          store_address: "Plot 123, Gaborone, Botswana",
-          store_phone: "+267 78549270",
-          store_website: window.location.origin
-        };
-
-        emailjs.send('service_0hxmvck', 'template_us3d5rc', templateParams)
-          .then(function(response) {
-            console.log('✅ Order notification sent!', response);
-          })
-          .catch(function(error) {
-            console.error('❌ Error sending notification:', error);
-          });
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            if (data && data.length > 0) {
+              callback({ success: true, seller: data[0] });
+            } else {
+              callback({ success: false });
+            }
+          } catch (e) {
+            callback({ success: false });
+          }
+        } else {
+          callback({ success: false });
+        }
       };
-      document.head.appendChild(script);
+      xhr.send();
     }
 
     // ============================================================
-    //  📥  SAVE ORDER TO SUPABASE
+    //  📤  SAVE ORDER TO SUPABASE
     // ============================================================
     function saveOrderToSupabase(orderData, callback) {
       var url = SUPABASE_URL + '/rest/v1/' + ORDERS_TABLE;
@@ -374,42 +332,56 @@
       xhr.setRequestHeader('Prefer', 'return=representation');
 
       xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 200 || xhr.status === 201) {
-            try {
-              var data = JSON.parse(xhr.responseText);
-              callback({ success: true, data: data });
-            } catch (e) {
-              if (xhr.responseText === '[]' || xhr.responseText === '') {
-                callback({ success: true, data: [orderData] });
-              } else {
-                callback({ success: false, error: 'Invalid response format' });
-              }
-            }
-          } else {
-            var errorMsg = 'Status ' + xhr.status + ': ' + xhr.responseText;
-            console.error('❌ Supabase error:', errorMsg);
-            callback({ success: false, error: errorMsg });
+        if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 201)) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            callback({ success: true, data: data });
+          } catch (e) {
+            callback({ success: true, data: [orderData] });
           }
+        } else {
+          callback({ success: false, error: xhr.status + ': ' + xhr.responseText });
         }
       };
-
-      xhr.onerror = function() {
-        console.error('❌ Network error');
-        callback({ success: false, error: 'Network error' });
-      };
-
       xhr.send(JSON.stringify(orderData));
     }
 
     // ============================================================
-    //  🛍️  CONFIRM BUY - PLACE ORDER
+    //  🔄  UPDATE LAPTOP STATUS TO SOLD
+    // ============================================================
+    function updateLaptopStatus(laptopId, buyerEmail, callback) {
+      var url = SUPABASE_URL + '/rest/v1/' + LAPTOPS_TABLE + '?id=eq.' + laptopId;
+      var data = {
+        status: 'sold',
+        sold_at: new Date().toISOString(),
+        buyer_email: buyerEmail
+      };
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('PATCH', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          callback({ success: true });
+        } else {
+          callback({ success: false });
+        }
+      };
+      xhr.send(JSON.stringify(data));
+    }
+
+    // ============================================================
+    //  🛍️  CONFIRM BUY
     // ============================================================
     function confirmBuy() {
       var index = document.getElementById('buyProductIndex').value;
       var laptop = allLaptops[index];
-      if (!laptop) {
-        showToast('❌ Product not found.', true);
+      if (!laptop) { showToast('❌ Product not found.', true); return; }
+
+      if (laptop.status === 'sold') {
+        showToast('❌ This laptop has already been sold.', true);
         return;
       }
 
@@ -422,12 +394,6 @@
         showToast('⚠️ Please enter your contact details.', true);
         return;
       }
-
-      if (customerEmail.indexOf('@') === -1 || customerEmail.indexOf('.') === -1) {
-        showToast('⚠️ Please enter a valid email address.', true);
-        return;
-      }
-
       if (!service) {
         showToast('⚠️ Please select a service method.', true);
         return;
@@ -435,8 +401,9 @@
 
       var confirmBtn = document.getElementById('confirmBuyBtn');
       confirmBtn.disabled = true;
-      confirmBtn.innerHTML = '<span class="loading-spinner"></span> Placing order...';
+      confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Placing order...';
 
+      // Build order with seller info if it's a seller laptop
       var orderPayload = {
         customer_name: customerName,
         customer_email: customerEmail,
@@ -450,29 +417,65 @@
         ordered_at: new Date().toISOString()
       };
 
-      saveOrderToSupabase(orderPayload, function(result) {
-        console.log('📥 Save result:', result);
+      // If seller laptop, add commission tracking
+      if (laptop.isSeller && laptop.seller_id) {
+        getSellerDetails(laptop.seller_id, function(sellerResult) {
+          if (sellerResult.success) {
+            var seller = sellerResult.seller;
+            var commissionRate = seller.commission_rate || 20;
+            var commissionAmount = (laptop.price * commissionRate) / 100;
+            var sellerPayout = laptop.price - commissionAmount;
 
+            orderPayload.seller_id = laptop.seller_id;
+            orderPayload.seller_name = seller.seller_name;
+            orderPayload.seller_email = seller.seller_email;
+            orderPayload.commission_rate = commissionRate;
+            orderPayload.commission_amount = commissionAmount;
+            orderPayload.seller_payout = sellerPayout;
+            orderPayload.payout_status = 'pending';
+
+            // Save order
+            saveOrder(orderPayload, laptop);
+          } else {
+            // Save without seller info
+            saveOrder(orderPayload, laptop);
+          }
+        });
+      } else {
+        // Not a seller laptop - save normally
+        saveOrder(orderPayload, laptop);
+      }
+    }
+
+    function saveOrder(orderPayload, laptop) {
+      saveOrderToSupabase(orderPayload, function(result) {
         if (!result.success) {
-          showToast('❌ Failed to save order. Please try again.', true);
-          confirmBtn.disabled = false;
-          confirmBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Place Order';
+          showToast('❌ Failed to place order.', true);
+          document.getElementById('confirmBuyBtn').disabled = false;
+          document.getElementById('confirmBuyBtn').innerHTML = '<i class="fas fa-check-circle me-1"></i> Place Order';
           return;
         }
 
-        var savedOrder = result.data && result.data.length > 0 ? result.data[0] : orderPayload;
-        console.log('✅ Order saved!', savedOrder);
-
-        sendOrderNotification(savedOrder);
-        showToast('✅ Order placed for "' + laptop.name + '"! Check your email.');
-
-        var modal = bootstrap.Modal.getInstance(document.getElementById('buyNowModal'));
-        if (modal) modal.hide();
-
-        document.getElementById('buyNowForm').reset();
-
-        confirmBtn.disabled = false;
-        confirmBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Place Order';
+        // If seller laptop, update status to sold
+        if (laptop.isSeller && laptop.id) {
+          updateLaptopStatus(laptop.id, orderPayload.customer_email, function(updateResult) {
+            if (updateResult.success) {
+              console.log('✅ Laptop marked as sold');
+            }
+            // Refresh the page to show sold status
+            setTimeout(function() {
+              location.reload();
+            }, 1500);
+          });
+        } else {
+          // For non-seller laptops, just show success
+          showToast('✅ Order placed for "' + laptop.name + '"! Check your email.');
+          var modal = bootstrap.Modal.getInstance(document.getElementById('buyNowModal'));
+          if (modal) modal.hide();
+          document.getElementById('buyNowForm').reset();
+          document.getElementById('confirmBuyBtn').disabled = false;
+          document.getElementById('confirmBuyBtn').innerHTML = '<i class="fas fa-check-circle me-1"></i> Place Order';
+        }
       });
     }
 
@@ -486,6 +489,8 @@
       document.getElementById('productNameDisplay').textContent = laptop.name;
       document.getElementById('productPriceDisplay').textContent = laptop.price;
       document.getElementById('buyProductIndex').value = index;
+      document.getElementById('buyProductId').value = laptop.id || '';
+      document.getElementById('buySellerId').value = laptop.seller_id || '';
       document.getElementById('buyCondition').value = laptop.condition || 'Pre-owned, Refurbished';
 
       document.getElementById('customerName').value = '';
@@ -494,20 +499,22 @@
       document.getElementById('buyService').value = '';
     }
 
-    // ============================================================
-    //  🗑️  DELETE LAPTOP (seller-added only)
-    // ============================================================
-    function deleteLaptop(index) {
-      var realIndex = index - existingLaptops.length;
-      if (realIndex < 0 || realIndex >= sellerLaptops.length) return;
-
-      if (confirm('Are you sure you want to delete this item?')) {
-        sellerLaptops.splice(realIndex, 1);
-        localStorage.setItem('laptops', JSON.stringify(sellerLaptops));
-        allLaptops = existingLaptops.concat(sellerLaptops);
-        renderProducts();
-        showToast('🗑️ Laptop deleted successfully');
-      }
+    function addToCart(index) {
+      var laptop = allLaptops[index];
+      if (!laptop || laptop.status === 'sold') return;
+      var cartItem = {
+        name: laptop.name,
+        price: laptop.price,
+        image: laptop.image,
+        condition: laptop.condition,
+        isSeller: laptop.isSeller || false,
+        laptopId: laptop.id || null,
+        sellerId: laptop.seller_id || null
+      };
+      cart.push(cartItem);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartButton();
+      showToast('🛒 "' + laptop.name + '" added to cart!');
     }
 
     // ============================================================
@@ -517,15 +524,19 @@
       var shop = document.getElementById('shop');
       shop.innerHTML = '';
 
+      allLaptops = existingLaptops.concat(sellerLaptops);
+
       for (var i = 0; i < allLaptops.length; i++) {
         var laptop = allLaptops[i];
-        var isSeller = i >= existingLaptops.length;
+        var isSeller = laptop.isSeller || false;
+        var isSold = laptop.status === 'sold';
 
         var card = document.createElement('div');
         card.className = 'col-md-4 col-lg-3 mb-4 laptop-card';
         card.innerHTML = `
           <div class="card shadow-sm h-100" style="position: relative;">
-            ${isSeller ? `<button class="delete-btn" onclick="deleteLaptop(${i})"><i class="fas fa-times"></i></button>` : ''}
+            ${isSold ? '<div class="sold-overlay"></div><div class="sold-badge">SOLD</div>' : ''}
+            ${isSeller && !isSold ? `<button class="btn btn-danger btn-sm" style="position:absolute;top:10px;right:10px;z-index:10;border-radius:50%;width:30px;height:30px;font-size:0.7rem;padding:0;" onclick="deleteLaptop(${i})"><i class="fas fa-times"></i></button>` : ''}
             <img src="${laptop.image || 'https://via.placeholder.com/300x220?text=No+Image'}" class="card-img-top" alt="${laptop.name}" 
                  onerror="this.src='https://via.placeholder.com/300x220?text=No+Image'">
             <div class="card-body d-flex flex-column">
@@ -534,12 +545,12 @@
               <p class="card-text small text-muted"><span class="badge-condition">${laptop.condition || 'Pre-owned, Refurbished'}</span></p>
               ${isSeller ? '<span class="seller-badge">➕ Seller Added</span>' : ''}
               <div class="mt-auto d-grid gap-2">
-                <button class="btn btn-primary btn-sm" onclick="addToCart(${i})">
-                  <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                <button class="btn btn-primary btn-sm" onclick="addToCart(${i})" ${isSold ? 'disabled' : ''}>
+                  <i class="fas fa-cart-plus me-1"></i>${isSold ? 'Sold Out' : 'Add to Cart'}
                 </button>
                 <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#buyNowModal" 
-                        onclick="prepareBuyNow(${i})">
-                  <i class="fas fa-bolt me-1"></i>Buy Now
+                        onclick="prepareBuyNow(${i})" ${isSold ? 'disabled' : ''}>
+                  <i class="fas fa-bolt me-1"></i>${isSold ? 'Unavailable' : 'Buy Now'}
                 </button>
               </div>
             </div>
@@ -552,16 +563,41 @@
     }
 
     // ============================================================
+    //  🗑️  DELETE LAPTOP (Admin)
+    // ============================================================
+    function deleteLaptop(index) {
+      var laptop = allLaptops[index];
+      if (!laptop || !laptop.isSeller) return;
+
+      if (!confirm('Are you sure you want to delete this laptop?')) return;
+
+      var url = SUPABASE_URL + '/rest/v1/' + LAPTOPS_TABLE + '?id=eq.' + laptop.id;
+      var xhr = new XMLHttpRequest();
+      xhr.open('DELETE', url, true);
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 204) {
+          showToast('🗑️ Laptop deleted successfully!');
+          fetchSellerLaptops(renderProducts);
+        }
+      };
+      xhr.send();
+    }
+
+    // ============================================================
     //  🚀  INIT
     // ============================================================
     function init() {
-      renderProducts();
-      updateCartButton();
-
-      console.log('✅ Shop page loaded with ' + allLaptops.length + ' laptops');
+      fetchSellerLaptops(function() {
+        renderProducts();
+        updateCartButton();
+        console.log('✅ Shop loaded with ' + allLaptops.length + ' laptops');
+      });
     }
 
-    // Expose functions globally
+    // Expose functions
     window.addToCart = addToCart;
     window.prepareBuyNow = prepareBuyNow;
     window.confirmBuy = confirmBuy;
@@ -578,5 +614,7 @@
 </body>
 
 </html>
+
+ 
 
 
