@@ -10,18 +10,84 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    body { background: #f4f6fa; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-    .container { max-width: 700px; margin: auto; padding: 20px; }
-    .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .form-label { font-weight: 600; }
-    .btn-primary { background: #b30000; border: none; padding: 12px; font-weight: 600; }
-    .btn-primary:hover { background: #8f0000; }
-    .navbar-brand i { color: #b30000; }
-    .commission-box { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 10px; margin: 15px 0; }
-    .commission-box i { color: #b30000; font-size: 1.2rem; margin-right: 8px; }
-    .preview-img { max-width: 200px; max-height: 200px; margin-top: 10px; border-radius: 8px; border: 1px solid #e9ecef; display: none; }
-    .agreement-check { margin: 15px 0; }
-    .text-danger { color: #b30000 !important; }
+    body {
+      background: #f4f6fa;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .form-label {
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: #b30000;
+      border: none;
+      padding: 12px;
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background: #8f0000;
+    }
+    .navbar-brand i {
+      color: #b30000;
+    }
+    .commission-box {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+    .commission-box i {
+      color: #b30000;
+      font-size: 1.2rem;
+      margin-right: 8px;
+    }
+    .preview-img {
+      max-width: 200px;
+      max-height: 200px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+      display: none;
+    }
+    .agreement-check {
+      margin: 15px 0;
+    }
+    .text-danger {
+      color: #b30000 !important;
+    }
+    .alert-error {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-top: 10px;
+      display: none;
+    }
+    .alert-success-custom {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-top: 10px;
+      display: none;
+    }
+    .alert-error i,
+    .alert-success-custom i {
+      margin-right: 8px;
+    }
   </style>
 </head>
 
@@ -163,12 +229,14 @@
         </button>
       </form>
 
-      <div id="submissionMessage" class="alert alert-success mt-3" style="display: none;">
-        <i class="fas fa-check-circle me-2"></i> Laptop listed successfully! Redirecting to shop...
+      <!-- Success Message -->
+      <div id="successMessage" class="alert-success-custom">
+        <i class="fas fa-check-circle"></i> <span id="successText">Laptop listed successfully!</span>
       </div>
 
-      <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;">
-        <i class="fas fa-exclamation-circle me-2"></i> <span id="errorText"></span>
+      <!-- Error Message -->
+      <div id="errorMessage" class="alert-error">
+        <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
       </div>
     </div>
   </div>
@@ -203,6 +271,88 @@
     }
 
     // ============================================================
+    //  📤  SHOW MESSAGES
+    // ============================================================
+    function showSuccess(message) {
+      var msg = document.getElementById('successMessage');
+      document.getElementById('successText').textContent = message;
+      msg.style.display = 'block';
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    function showError(message) {
+      var msg = document.getElementById('errorMessage');
+      document.getElementById('errorText').textContent = message;
+      msg.style.display = 'block';
+      document.getElementById('successMessage').style.display = 'none';
+    }
+
+    function hideMessages() {
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    // ============================================================
+    //  🔍  CHECK IF SELLER EXISTS
+    // ============================================================
+    function getSellerByEmail(email, callback) {
+      var url = SUPABASE_URL + '/rest/v1/' + SELLERS_TABLE + '?seller_email=eq.' + encodeURIComponent(email);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            if (data && data.length > 0) {
+              callback({ success: true, data: data[0] });
+            } else {
+              callback({ success: false });
+            }
+          } catch (e) {
+            callback({ success: false });
+          }
+        } else if (xhr.readyState === 4) {
+          callback({ success: false });
+        }
+      };
+      xhr.send();
+    }
+
+    // ============================================================
+    //  🔍  CHECK IF LAPTOP EXISTS (duplicate name)
+    // ============================================================
+    function getLaptopByName(name, callback) {
+      var url = SUPABASE_URL + '/rest/v1/' + LAPTOPS_TABLE + '?name=eq.' + encodeURIComponent(name) + '&status=eq.available';
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          try {
+            var data = JSON.parse(xhr.responseText);
+            if (data && data.length > 0) {
+              callback({ success: true, data: data[0] });
+            } else {
+              callback({ success: false });
+            }
+          } catch (e) {
+            callback({ success: false });
+          }
+        } else if (xhr.readyState === 4) {
+          callback({ success: false });
+        }
+      };
+      xhr.send();
+    }
+
+    // ============================================================
     //  📤  SAVE SELLER TO SUPABASE
     // ============================================================
     function saveSellerToSupabase(sellerData, callback) {
@@ -224,6 +374,15 @@
             } catch (e) {
               callback({ success: false, error: 'Invalid response' });
             }
+          } else if (xhr.status === 409) {
+            // Duplicate seller - get existing
+            getSellerByEmail(sellerData.seller_email, function(result) {
+              if (result.success) {
+                callback({ success: true, data: result.data, alreadyExists: true });
+              } else {
+                callback({ success: false, error: 'Duplicate seller but could not retrieve' });
+              }
+            });
           } else {
             callback({ success: false, error: xhr.status + ': ' + xhr.responseText });
           }
@@ -249,6 +408,8 @@
         if (xhr.readyState === 4) {
           if (xhr.status === 200 || xhr.status === 201) {
             callback({ success: true });
+          } else if (xhr.status === 409) {
+            callback({ success: false, error: 'This laptop is already listed.', duplicate: true });
           } else {
             callback({ success: false, error: xhr.status + ': ' + xhr.responseText });
           }
@@ -258,7 +419,7 @@
     }
 
     // ============================================================
-    //  📤  ADD ITEM (Seller + Laptop)
+    //  📤  ADD ITEM (Seller + Laptop) WITH DUPLICATE CHECKING
     // ============================================================
     function addItem() {
       var name = document.getElementById('name').value.trim();
@@ -276,92 +437,131 @@
 
       // Validate
       if (!name || !price || !condition || !file) {
-        alert('⚠️ Please fill in all product details.');
+        showError('⚠️ Please fill in all product details.');
         return;
       }
 
       if (!sellerName || !sellerEmail || !sellerPhone) {
-        alert('⚠️ Please enter your contact details.');
+        showError('⚠️ Please enter your contact details.');
         return;
       }
 
       if (!bankName || !accountHolder || !accountNumber) {
-        alert('⚠️ Please enter your banking details.');
+        showError('⚠️ Please enter your banking details.');
         return;
       }
 
       if (!agreement) {
-        alert('⚠️ You must agree to the 20% commission terms.');
+        showError('⚠️ You must agree to the 20% commission terms.');
         return;
       }
+
+      // Hide previous messages
+      hideMessages();
 
       // Show loading
       var btn = document.querySelector('.btn-primary');
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Listing...';
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Checking...';
 
-      document.getElementById('errorMessage').style.display = 'none';
+      // STEP 1: Check if laptop already exists
+      getLaptopByName(name, function(laptopResult) {
+        if (laptopResult.success) {
+          // Laptop already exists
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
+          showError('❌ "' + name + '" is already listed. Please use a different name.');
+          return;
+        }
+
+        // STEP 2: Check if seller exists (by email)
+        getSellerByEmail(sellerEmail, function(sellerResult) {
+          if (sellerResult.success) {
+            // Seller already exists - use existing seller
+            var sellerId = sellerResult.data.id;
+            console.log('✅ Existing seller found with ID:', sellerId);
+
+            // Save laptop with existing seller_id
+            saveLaptopWithSellerId(sellerId, name, price, condition, file, btn);
+          } else {
+            // Seller doesn't exist - create new seller
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Registering seller...';
+
+            var sellerData = {
+              seller_name: sellerName,
+              seller_email: sellerEmail,
+              seller_phone: sellerPhone,
+              bank_name: bankName,
+              account_holder: accountHolder,
+              account_number: accountNumber,
+              branch_code: branchCode || '',
+              commission_rate: COMMISSION_RATE
+            };
+
+            saveSellerToSupabase(sellerData, function(createResult) {
+              if (!createResult.success) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
+
+                if (createResult.alreadyExists) {
+                  // This shouldn't happen since we checked, but just in case
+                  showError('⚠️ You are already registered. Please try again.');
+                } else {
+                  showError('❌ Failed to register seller: ' + (createResult.error || 'Unknown error'));
+                }
+                return;
+              }
+
+              var sellerId = createResult.data.id;
+              console.log('✅ New seller created with ID:', sellerId);
+
+              // Save laptop with new seller_id
+              saveLaptopWithSellerId(sellerId, name, price, condition, file, btn);
+            });
+          }
+        });
+      });
+    }
+
+    // ============================================================
+    //  📤  SAVE LAPTOP WITH SELLER ID
+    // ============================================================
+    function saveLaptopWithSellerId(sellerId, name, price, condition, file, btn) {
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Listing laptop...';
 
       var reader = new FileReader();
       reader.onload = function(e) {
         var imageData = e.target.result;
 
-        // Step 1: Save seller details
-        var sellerData = {
-          seller_name: sellerName,
-          seller_email: sellerEmail,
-          seller_phone: sellerPhone,
-          bank_name: bankName,
-          account_holder: accountHolder,
-          account_number: accountNumber,
-          branch_code: branchCode || '',
+        var laptopData = {
+          name: name,
+          price: parseFloat(price),
+          condition: condition,
+          image: imageData,
+          status: 'available',
+          seller_id: sellerId,
           commission_rate: COMMISSION_RATE
         };
 
-        saveSellerToSupabase(sellerData, function(sellerResult) {
-          if (!sellerResult.success) {
-            var errorMsg = document.getElementById('errorText');
-            errorMsg.textContent = 'Failed to save seller: ' + (sellerResult.error || 'Unknown error');
-            document.getElementById('errorMessage').style.display = 'block';
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
-            return;
-          }
+        saveLaptopToSupabase(laptopData, function(laptopResult) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
 
-          var sellerId = sellerResult.data.id;
-          console.log('✅ Seller saved with ID:', sellerId);
+          if (laptopResult.success) {
+            showSuccess('✅ "' + name + '" listed successfully! Redirecting...');
+            document.getElementById('sellForm').reset();
+            document.getElementById('preview').style.display = 'none';
 
-          // Step 2: Save laptop with seller_id
-          var laptopData = {
-            name: name,
-            price: parseFloat(price),
-            condition: condition,
-            image: imageData,
-            status: 'available',
-            seller_id: sellerId,
-            commission_rate: COMMISSION_RATE
-          };
-
-          saveLaptopToSupabase(laptopData, function(laptopResult) {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>List My Laptop';
-
-            if (laptopResult.success) {
-              var msg = document.getElementById('submissionMessage');
-              msg.style.display = 'block';
-
-              document.getElementById('sellForm').reset();
-              document.getElementById('preview').style.display = 'none';
-
-              setTimeout(function() {
-                window.location.href = 'shop.html';
-              }, 2000);
+            setTimeout(function() {
+              window.location.href = 'shop.html';
+            }, 2000);
+          } else {
+            if (laptopResult.duplicate) {
+              showError('❌ "' + name + '" is already listed. Please use a different name.');
             } else {
-              var errorMsg = document.getElementById('errorText');
-              errorMsg.textContent = 'Failed to save laptop: ' + (laptopResult.error || 'Unknown error');
-              document.getElementById('errorMessage').style.display = 'block';
+              showError('❌ Failed to list laptop: ' + (laptopResult.error || 'Unknown error'));
             }
-          });
+          }
         });
       };
       reader.readAsDataURL(file);
