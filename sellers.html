@@ -1,76 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Sell Gadget</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell Gadget · TechLap Store</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    body { font-family: Arial; background:#f5f5f5; padding:20px; }
-    .container { max-width:900px; margin:auto; }
-    .card { background:white; padding:15px; border-radius:10px; }
-    input, select { width:100%; padding:10px; margin:8px 0; }
-    button { width:100%; padding:10px; background:#007bff; color:white; border:none; cursor:pointer; }
+    body {
+      background: #f4f6fa;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .form-label {
+      font-weight: 600;
+    }
+    .btn-primary {
+      background: #b30000;
+      border: none;
+      padding: 12px;
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background: #8f0000;
+    }
+    .btn-secondary {
+      background: #6c757d;
+      border: none;
+      padding: 12px;
+      font-weight: 600;
+    }
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+    .navbar-brand i {
+      color: #b30000;
+    }
+    .preview-img {
+      max-width: 200px;
+      max-height: 200px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+      display: none;
+    }
   </style>
 </head>
+
 <body>
 
-<div class="container">
-  <a href="index.html">← Back Home</a>
-  <h1>Sell Your Gadget</h1>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="fas fa-laptop me-2"></i>TechLap Store
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
+          <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-  <div class="card">
-    <input type="text" id="name" placeholder="Gadget Name">
-    <input type="number" id="price" placeholder="Price">
+  <!-- SELL FORM -->
+  <div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2><i class="fas fa-plus-circle me-2"></i>Sell Your Gadget</h2>
+      <a href="shop.html" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i>Back to Shop</a>
+    </div>
 
-    <select id="condition">
-      <option value="">Select Condition</option>
-      <option>New</option>
-      <option>Used - Like New</option>
-      <option>Used - Good</option>
-      <option>Used - Fair</option>
-    </select>
+    <div class="card">
+      <form id="sellForm" onsubmit="return false;">
+        <div class="mb-3">
+          <label for="name" class="form-label">Gadget Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="name" placeholder="e.g. Dell Inspiron 15" required>
+        </div>
 
-    <input type="file" id="image" accept="image/*">
+        <div class="mb-3">
+          <label for="price" class="form-label">Price (Pula) <span class="text-danger">*</span></label>
+          <input type="number" class="form-control" id="price" placeholder="e.g. 4200" required>
+        </div>
 
-    <button onclick="addItem()">Add Listing</button>
+        <div class="mb-3">
+          <label for="condition" class="form-label">Condition <span class="text-danger">*</span></label>
+          <select class="form-select" id="condition" required>
+            <option value="">Select condition...</option>
+            <option value="New">New</option>
+            <option value="Used - Like New">Used - Like New</option>
+            <option value="Used - Good">Used - Good</option>
+            <option value="Used - Fair">Used - Fair</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">Product Image <span class="text-danger">*</span></label>
+          <input type="file" class="form-control" id="image" accept="image/*" onchange="previewImage()" required>
+          <img id="preview" class="preview-img" alt="Preview">
+        </div>
+
+        <button type="button" class="btn btn-primary w-100" onclick="addItem()">
+          <i class="fas fa-plus-circle me-2"></i>Add Listing
+        </button>
+      </form>
+
+      <div id="submissionMessage" class="alert alert-success mt-3" style="display: none;">
+        <i class="fas fa-check-circle me-2"></i> Laptop added successfully! Redirecting to shop...
+      </div>
+    </div>
   </div>
-</div>
 
-<script>
-function addItem() {
-  const name = document.getElementById('name').value;
-  const price = document.getElementById('price').value;
-  const condition = document.getElementById('condition').value;
-  const file = document.getElementById('image').files[0];
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
 
-  if (!name || !price || !condition || !file) {
-    alert('Please fill all fields');
-    return;
-  }
+  <!-- ========================================== -->
+  <!-- SUPABASE CONFIGURATION                     -->
+  <!-- ========================================== -->
+  <script>
+    // ============================================================
+    //  🔧  SUPABASE CONFIGURATION
+    // ============================================================
+    var SUPABASE_URL = "https://wmebpsheblrkuvygguae.supabase.co";
+    var SUPABASE_ANON_KEY = "sb_publishable_rUkBj0Th3x6ZXGbPkLGsHQ_f5WG3jB_";
+    var LAPTOPS_TABLE = 'laptops'; // You'll need to create this table
 
-  const reader = new FileReader();
+    // ============================================================
+    //  🖼️  PREVIEW IMAGE
+    // ============================================================
+    function previewImage() {
+      var file = document.getElementById('image').files[0];
+      var preview = document.getElementById('preview');
+      if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
 
-  reader.onload = function(e) {
-    const item = {
-      name,
-      price,
-      condition,
-      image: e.target.result
-    };
+    // ============================================================
+    //  📤  ADD ITEM TO SUPABASE
+    // ============================================================
+    function addItem() {
+      var name = document.getElementById('name').value.trim();
+      var price = document.getElementById('price').value.trim();
+      var condition = document.getElementById('condition').value;
+      var file = document.getElementById('image').files[0];
 
-    // Save to shared storage
-    let items = JSON.parse(localStorage.getItem('laptops')) || [];
-    items.push(item);
-    localStorage.setItem('laptops', JSON.stringify(items));
+      // Validate
+      if (!name || !price || !condition || !file) {
+        alert('⚠️ Please fill in all fields and select an image.');
+        return;
+      }
 
-    // 🔥 Redirect to laptops page
-    window.location.href = "laptops.html";
-  };
+      // Show loading
+      var btn = document.querySelector('.btn-primary');
+      var originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Adding...';
 
-  reader.readAsDataURL(file);
-}
-</script>
+      // Read image as base64
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var imageData = e.target.result;
+
+        // Prepare data for Supabase
+        var laptopData = {
+          name: name,
+          price: parseFloat(price),
+          condition: condition,
+          image: imageData // base64 image
+        };
+
+        // Save to Supabase
+        saveToSupabase(laptopData);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ============================================================
+    //  📥  SAVE TO SUPABASE
+    // ============================================================
+    function saveToSupabase(data) {
+      var url = SUPABASE_URL + '/rest/v1/' + LAPTOPS_TABLE;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Prefer', 'return=representation');
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          var btn = document.querySelector('.btn-primary');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add Listing';
+
+          if (xhr.status === 200 || xhr.status === 201) {
+            // Show success message
+            var msg = document.getElementById('submissionMessage');
+            msg.style.display = 'block';
+
+            // Reset form
+            document.getElementById('sellForm').reset();
+            document.getElementById('preview').style.display = 'none';
+
+            // Redirect after 2 seconds
+            setTimeout(function() {
+              window.location.href = 'shop.html';
+            }, 2000);
+          } else {
+            var errorMsg = 'Status ' + xhr.status + ': ' + xhr.responseText;
+            console.error('❌ Supabase error:', errorMsg);
+            alert('❌ Failed to add laptop. Please try again.\n\nError: ' + errorMsg);
+          }
+        }
+      };
+
+      xhr.onerror = function() {
+        var btn = document.querySelector('.btn-primary');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Add Listing';
+        alert('❌ Network error. Please check your internet connection.');
+      };
+
+      xhr.send(JSON.stringify(data));
+    }
+  </script>
 
 </body>
+
 </html>
 
 
