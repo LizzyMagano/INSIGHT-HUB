@@ -1,159 +1,886 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Cart</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Cart · TechLap Store</title>
 
-<style>
-body { 
-  font-family: Arial; 
-  margin:0; 
-  text-align:center;
-  color:white;
-}
-
-/* Background */
-body::before {
-  content: "";
-  position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-              url('laptop.jpg'); /* change image if needed */
-  background-size: cover;
-  background-position: center;
-  z-index:-1;
-}
-
-header { 
-  background:#b30000; 
-  color:white; 
-  padding:20px; 
-}
-
-#cart {
-  padding: 20px;
-}
-
-/* Cart Cards */
-.cart-item { 
-  border:1px solid rgba(255,255,255,0.2); 
-  margin:15px; 
-  padding:15px; 
-  border-radius:10px; 
-  display:inline-block; 
-  width:250px; 
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(8px);
-  box-shadow:0 0 10px rgba(0,0,0,0.3);
-}
-
-.cart-item img { 
-  width:200px; 
-  height:auto; 
-  border-radius:8px;
-}
-
-/* Buttons */
-button { 
-  margin:10px; 
-  padding:10px 15px; 
-  background:#b30000; 
-  color:white; 
-  border:none; 
-  border-radius:6px; 
-  cursor:pointer;
-  font-weight: bold;
-}
-
-button:hover { 
-  background:white; 
-  color:#b30000; 
-  border:2px solid #b30000; 
-}
-
-/* Bottom buttons layout */
-.actions {
-  margin: 20px;
-}
-</style>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      background-color: #f4f4f9;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    .card-img-top {
+      height: 220px;
+      object-fit: cover;
+      background-color: #e9ecef;
+    }
+    .btn-remove {
+      background-color: #dc3545;
+      border-color: #dc3545;
+      color: #fff;
+    }
+    .btn-remove:hover {
+      background-color: #bb2d3b;
+      border-color: #b02a37;
+      color: #fff;
+    }
+    .btn-buy {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+      color: #fff;
+    }
+    .btn-buy:hover {
+      background-color: #0b5ed7;
+      border-color: #0a58ca;
+      color: #fff;
+    }
+    .action-buttons .btn {
+      min-width: 100px;
+    }
+    .card-footer {
+      background-color: transparent;
+      border-top: none;
+      padding-top: 0;
+    }
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+    .modal-backdrop {
+      z-index: 1040;
+    }
+    .cart-item-card {
+      position: relative;
+    }
+    .cart-item-card .checkbox-wrapper {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 5;
+      background: rgba(255,255,255,0.9);
+      padding: 4px 8px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .cart-item-card.show-checkbox .checkbox-wrapper {
+      display: block;
+    }
+    .cart-item-checkbox {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #b30000;
+    }
+    .card .card-body {
+      padding-top: 8px;
+    }
+    .bulk-actions {
+      background: white;
+      border-radius: 12px;
+      padding: 12px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .bulk-actions.active {
+      display: flex;
+    }
+    .bulk-actions .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .bulk-actions .right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-bulk-buy {
+      background: #25D366;
+      border: none;
+      color: white;
+      padding: 8px 24px;
+      border-radius: 60px;
+      font-weight: 600;
+    }
+    .btn-bulk-buy:hover {
+      background: #1da851;
+      color: white;
+    }
+    .btn-select-mode {
+      background: #b30000;
+      border: none;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 60px;
+      font-weight: 500;
+    }
+    .btn-select-mode:hover {
+      background: #8f0000;
+      color: white;
+    }
+    .btn-select-mode.active {
+      background: #dc3545;
+    }
+    .btn-select-mode.active:hover {
+      background: #bb2d3b;
+    }
+    .btn-select-all {
+      background: #e9ecef;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .btn-select-all:hover {
+      background: #dee2e6;
+    }
+    .selected-count {
+      font-weight: 600;
+      color: #b30000;
+    }
+    .bulk-items-list {
+      max-height: 150px;
+      overflow-y: auto;
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .bulk-items-list .item-row {
+      padding: 4px 0;
+      border-bottom: 1px solid #e9ecef;
+      font-size: 0.9rem;
+    }
+    .bulk-items-list .item-row:last-child {
+      border-bottom: none;
+    }
+    .navbar-brand i {
+      color: #b30000;
+    }
+    .badge-condition {
+      background: #e9ecef;
+      color: #1a1a2e;
+      font-weight: 500;
+      font-size: 0.65rem;
+      padding: 2px 10px;
+      border-radius: 60px;
+    }
+    .btn-primary {
+      background: #b30000;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: #8f0000;
+    }
+    .btn-success {
+      background: #16a34a;
+      border: none;
+    }
+    .btn-success:hover {
+      background: #15803d;
+    }
+    .modal-header {
+      background: #1e293b;
+      color: white;
+      border-radius: 1.25rem 1.25rem 0 0;
+    }
+    .modal-header .btn-close {
+      filter: brightness(0) invert(1);
+    }
+    @media (max-width: 576px) {
+      .bulk-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .bulk-actions .left {
+        justify-content: center;
+      }
+      .bulk-actions .right {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-<h1>Your Cart</h1>
-</header>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="fas fa-laptop me-2"></i>TechLap Store
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+          <li class="nav-item"><a class="nav-link active" href="cart.html">Cart</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="feedback.html">Feedback</a></li>
+        </ul>
+        <button id="toggleCart" class="btn btn-success ms-3" onclick="window.location.href='shop.html'">
+          <i class="fas fa-laptop me-1"></i> Shop
+        </button>
+      </div>
+    </div>
+  </nav>
 
-<div id="cart"></div>
+  <!-- CART SECTION -->
+  <main class="container my-5">
+    <h1 class="mb-4">🛍️ Your Laptop Cart</h1>
 
-<div class="actions">
-  <button onclick="goBack()">← View More</button>
-  <button onclick="checkout()">Checkout 🛒</button>
-</div>
+    <!-- Bulk Actions Bar (hidden by default) -->
+    <div id="bulkActions" class="bulk-actions">
+      <div class="left">
+        <span>Select: </span>
+        <button class="btn-select-all" onclick="selectAllItems()">✅ Select All</button>
+        <button class="btn-select-all" onclick="deselectAllItems()">❌ Deselect All</button>
+        <span class="selected-count" id="selectedCount">0 selected</span>
+      </div>
+      <div class="right">
+        <button class="btn-bulk-buy" onclick="bulkBuy()">
+          <i class="fas fa-shopping-bag me-1"></i> Buy Selected (<span id="bulkCount">0</span>)
+        </button>
+      </div>
+    </div>
 
-<script>
-// Load cart
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let cartDiv = document.getElementById("cart");
+    <!-- Select Mode Toggle Button -->
+    <div class="mb-3">
+      <button id="toggleSelectBtn" class="btn-select-mode" onclick="toggleSelectMode()">
+        <i class="fas fa-check-square me-1"></i> Select Items
+      </button>
+    </div>
 
-// Display cart
-function renderCart() {
-    cartDiv.innerHTML = '';
+    <div id="cart-items" class="row g-4"></div>
 
-    if(cart.length === 0){
-        cartDiv.innerHTML = "<p>Cart is empty</p>";
-        return;
+    <!-- Empty Cart Message -->
+    <div id="emptyCart" class="text-center py-5" style="display: none;">
+      <i class="fas fa-shopping-cart fa-4x text-muted mb-3"></i>
+      <h4>Your cart is empty</h4>
+      <p class="text-muted">Visit the <a href="shop.html">Shop</a> to add laptops.</p>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">&copy; 2025 TechLap Store</p>
+  </footer>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container">
+    <div id="orderToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMessage">
+          ✅ Order placed successfully!
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUY MODAL -->
+  <div class="modal fade" id="buyModal" tabindex="-1" aria-labelledby="buyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="buyModalLabel">🛒 Complete Your Purchase</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="buyForm">
+            <input type="hidden" id="buyMode" value="single">
+
+            <!-- Customer Details -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="customerName" class="form-label">👤 Your Name <span class="text-danger">*</span></label>
+                <input type="text" id="customerName" class="form-control" placeholder="Enter your full name" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="customerEmail" class="form-label">📧 Email Address <span class="text-danger">*</span></label>
+                <input type="email" id="customerEmail" class="form-control" placeholder="you@example.com" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="customerPhone" class="form-label">📱 Phone Number <span class="text-danger">*</span></label>
+              <input type="tel" id="customerPhone" class="form-control" placeholder="+267 78 549 270" required>
+            </div>
+
+            <hr>
+
+            <!-- Items List (for bulk) -->
+            <div id="bulkItemsSection" style="display: none;">
+              <label class="form-label fw-bold">📦 Items in this order:</label>
+              <div class="bulk-items-list" id="bulkItemsList"></div>
+              <p class="fw-bold text-success mt-2">Total: P<span id="bulkTotalPrice">0.00</span></p>
+              <hr>
+            </div>
+
+            <!-- Single Item Info -->
+            <div id="singleItemSection">
+              <div class="mb-3">
+                <label class="form-label fw-bold">📦 Item:</label>
+                <p class="bg-light p-2 rounded" id="singleItemName">-</p>
+              </div>
+            </div>
+
+            <!-- Condition (read-only) -->
+            <div class="mb-3">
+              <label for="buyCondition" class="form-label">🔧 Condition</label>
+              <input type="text" id="buyCondition" class="form-control" disabled>
+            </div>
+
+            <div class="mb-3">
+              <label for="buyService" class="form-label">📬 Service Method <span class="text-danger">*</span></label>
+              <select id="buyService" class="form-select" required>
+                <option value="">Select service...</option>
+                <option value="Delivery">🚚 Delivery</option>
+                <option value="Pickup">🏪 Pickup</option>
+                <option value="Express">⚡ Express Delivery</option>
+              </select>
+            </div>
+
+            <input type="hidden" id="buyItemIndex" value="">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-success" id="confirmBuyBtn">✅ Place Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
+
+  <!-- ========================================== -->
+  <!-- CART LOGIC                                 -->
+  <!-- ========================================== -->
+  <script>
+    // ============================================================
+    //  🔧  SUPABASE CONFIGURATION
+    // ============================================================
+    var SUPABASE_URL = "https://wmebpsheblrkuvygguae.supabase.co";
+    var SUPABASE_ANON_KEY = "sb_publishable_rUkBj0Th3x6ZXGbPkLGsHQ_f5WG3jB_";
+    var ORDERS_TABLE = 'shop_orders';
+
+    // ============================================================
+    //  🛒  CART MANAGEMENT
+    // ============================================================
+    var cart = JSON.parse(localStorage.getItem("cart")) || [];
+    var selectModeActive = false;
+
+    function showToast(message, isError) {
+      var toastEl = document.getElementById('orderToast');
+      var msgEl = document.getElementById('toastMessage');
+      msgEl.textContent = message;
+      toastEl.style.background = isError ? '#dc3545' : '#1e293b';
+      var toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+      toast.show();
     }
 
-    cart.forEach((item, index) => {
-        let div = document.createElement("div");
-        div.className = "cart-item";
+    function saveAndRender() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
 
-        div.innerHTML = `
-            <img src="${item.image}" alt="${item.name}">
-            <h3>${item.name}</h3>
-            <p>
-                Price: ${item.price}<br>
-                Deposit: ${item.deposit}<br>
-                Installments: ${item.installments}<br>
-                Storage: ${item.storage}<br>
-                Condition: Pre-owned, Refurbished
-            </p>
-            <button onclick="removeItem(${index})">Remove</button>
+    // ============================================================
+    //  🔄  TOGGLE SELECT MODE
+    // ============================================================
+    function toggleSelectMode() {
+      selectModeActive = !selectModeActive;
+      var btn = document.getElementById('toggleSelectBtn');
+      var bulkActions = document.getElementById('bulkActions');
+      var cards = document.querySelectorAll('.cart-item-card');
+
+      if (selectModeActive) {
+        btn.innerHTML = '<i class="fas fa-times me-1"></i> Cancel Select';
+        btn.classList.add('active');
+        bulkActions.classList.add('active');
+        for (var i = 0; i < cards.length; i++) {
+          cards[i].classList.add('show-checkbox');
+        }
+        var checkboxes = document.querySelectorAll('.cart-item-checkbox');
+        for (var c = 0; c < checkboxes.length; c++) {
+          checkboxes[c].checked = false;
+        }
+        updateSelectedCount();
+      } else {
+        btn.innerHTML = '<i class="fas fa-check-square me-1"></i> Select Items';
+        btn.classList.remove('active');
+        bulkActions.classList.remove('active');
+        for (var i = 0; i < cards.length; i++) {
+          cards[i].classList.remove('show-checkbox');
+        }
+        var checkboxes = document.querySelectorAll('.cart-item-checkbox');
+        for (var c = 0; c < checkboxes.length; c++) {
+          checkboxes[c].checked = false;
+        }
+        updateSelectedCount();
+      }
+    }
+
+    // ============================================================
+    //  📥  SAVE ORDER TO SUPABASE
+    // ============================================================
+    function saveOrderToSupabase(orderData, callback) {
+      var url = SUPABASE_URL + '/rest/v1/' + ORDERS_TABLE;
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('apikey', SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + SUPABASE_ANON_KEY);
+      xhr.setRequestHeader('Prefer', 'return=representation');
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200 || xhr.status === 201) {
+            try {
+              var data = JSON.parse(xhr.responseText);
+              callback({ success: true, data: data });
+            } catch (e) {
+              if (xhr.responseText === '[]' || xhr.responseText === '') {
+                callback({ success: true, data: [orderData] });
+              } else {
+                callback({ success: false, error: 'Invalid response format' });
+              }
+            }
+          } else {
+            var errorMsg = 'Status ' + xhr.status + ': ' + xhr.responseText;
+            console.error('❌ Supabase error:', errorMsg);
+            callback({ success: false, error: errorMsg });
+          }
+        }
+      };
+
+      xhr.onerror = function() {
+        console.error('❌ Network error');
+        callback({ success: false, error: 'Network error' });
+      };
+
+      xhr.send(JSON.stringify(orderData));
+    }
+
+    // ============================================================
+    //  📦  SAVE MULTIPLE ORDERS
+    // ============================================================
+    function saveMultipleOrdersToSupabase(orders, callback) {
+      var results = [];
+      var completed = 0;
+      var successCount = 0;
+
+      if (orders.length === 0) {
+        callback({ success: true, data: [] });
+        return;
+      }
+
+      orders.forEach(function(order, index) {
+        saveOrderToSupabase(order, function(result) {
+          results[index] = result;
+          if (result.success) successCount++;
+          completed++;
+
+          if (completed === orders.length) {
+            callback({ success: successCount > 0, data: results, successCount: successCount });
+          }
+        });
+      });
+    }
+
+    // ============================================================
+    //  📧  SEND ORDER NOTIFICATION
+    // ============================================================
+    function sendOrderNotification(orderData) {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+      script.onload = function() {
+        emailjs.init('p1SkBpAIthT5H_oqV');
+
+        var orderDate = new Date(orderData.ordered_at);
+        var formattedDate = orderDate.toLocaleDateString('en-BW', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        var templateParams = {
+          order_id: orderData.id || 'N/A',
+          customer_name: orderData.customer_name,
+          customer_email: orderData.customer_email,
+          product_name: orderData.product_name,
+          price: orderData.price.toFixed(2),
+          color: orderData.color || 'N/A',
+          size: orderData.size || 'N/A',
+          service_method: orderData.service_method,
+          ordered_at: formattedDate,
+          status: orderData.status,
+          store_name: "TechLap Store",
+          store_address: "Plot 123, Gaborone, Botswana",
+          store_phone: "+267 78549270",
+          store_website: window.location.origin
+        };
+
+        emailjs.send('service_0hxmvck', 'template_us3d5rc', templateParams)
+          .then(function(response) {
+            console.log('✅ Order notification sent!', response);
+          })
+          .catch(function(error) {
+            console.error('❌ Error sending notification:', error);
+          });
+      };
+      document.head.appendChild(script);
+    }
+
+    // ============================================================
+    //  🎨  RENDER CART
+    // ============================================================
+    function renderCart() {
+      var cartItemsDiv = document.getElementById('cart-items');
+      var emptyCartDiv = document.getElementById('emptyCart');
+      cartItemsDiv.innerHTML = '';
+
+      if (cart.length === 0) {
+        emptyCartDiv.style.display = 'block';
+        document.getElementById('bulkActions').classList.remove('active');
+        document.getElementById('toggleSelectBtn').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('toggleSelectBtn').style.display = 'inline-block';
+      emptyCartDiv.style.display = 'none';
+
+      for (var i = 0; i < cart.length; i++) {
+        var item = cart[i];
+        var card = document.createElement('div');
+        card.className = 'col-md-4 mb-4 cart-item-card';
+        card.dataset.index = i;
+        if (selectModeActive) {
+          card.classList.add('show-checkbox');
+        }
+
+        card.innerHTML = `
+          <div class="card shadow-sm h-100">
+            <div class="checkbox-wrapper">
+              <input type="checkbox" class="cart-item-checkbox" data-index="${i}" onchange="updateSelectedCount()">
+            </div>
+            <img src="${item.image || 'https://via.placeholder.com/300x220?text=No+Image'}" class="card-img-top" alt="${item.name || 'Laptop'}" onerror="this.src='https://via.placeholder.com/300x220?text=No+Image'">
+            <div class="card-body">
+              <h5 class="card-title">${item.name || 'Unnamed'}</h5>
+              <p class="card-text fw-bold text-danger">P${item.price !== undefined ? item.price : '0.00'}</p>
+              <p class="card-text small text-muted"><span class="badge-condition">${item.condition || 'Pre-owned, Refurbished'}</span></p>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center action-buttons">
+              <button class="btn btn-remove btn-sm" data-index="${i}">🗑️ Remove</button>
+              <button class="btn btn-buy btn-sm buy-now-btn" data-index="${i}">🛒 Buy Now</button>
+            </div>
+          </div>
         `;
+        cartItemsDiv.appendChild(card);
+      }
 
-        cartDiv.appendChild(div);
-    });
-}
+      // Remove event listeners
+      var removeBtns = document.querySelectorAll('.btn-remove');
+      for (var r = 0; r < removeBtns.length; r++) {
+        removeBtns[r].addEventListener('click', function(e) {
+          var idx = parseInt(this.getAttribute('data-index'), 10);
+          if (!isNaN(idx) && idx >= 0 && idx < cart.length) {
+            cart.splice(idx, 1);
+            saveAndRender();
+            showToast('🗑️ Item removed from cart');
+          }
+        });
+      }
 
-// Remove item
-function removeItem(index){
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
-}
+      // Buy event listeners
+      var buyBtns = document.querySelectorAll('.buy-now-btn');
+      for (var b = 0; b < buyBtns.length; b++) {
+        buyBtns[b].addEventListener('click', function(e) {
+          var idx = parseInt(this.getAttribute('data-index'), 10);
+          if (!isNaN(idx) && idx >= 0 && idx < cart.length) {
+            openBuyModal(idx);
+          }
+        });
+      }
 
-// FIXED: correct page link
-function goBack() { 
-    window.location.href = "laptops.html"; 
-}
-
-// Checkout
-function checkout() {
-    if(cart.length === 0){
-        alert("Your cart is empty!");
-        return;
+      updateSelectedCount();
     }
-    window.location.href = "form.html";
-}
 
-// Run on load
-renderCart();
-</script>
+    // ============================================================
+    //  🛠️  SELECTION FUNCTIONS
+    // ============================================================
+    function selectAllItems() {
+      var checkboxes = document.querySelectorAll('.cart-item-checkbox');
+      for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = true;
+      }
+      updateSelectedCount();
+    }
+
+    function deselectAllItems() {
+      var checkboxes = document.querySelectorAll('.cart-item-checkbox');
+      for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = false;
+      }
+      updateSelectedCount();
+    }
+
+    function updateSelectedCount() {
+      var checked = document.querySelectorAll('.cart-item-checkbox:checked');
+      var count = checked.length;
+      document.getElementById('selectedCount').textContent = count + ' selected';
+      document.getElementById('bulkCount').textContent = count;
+    }
+
+    // ============================================================
+    //  🛍️  BULK BUY
+    // ============================================================
+    function bulkBuy() {
+      var checkedBoxes = document.querySelectorAll('.cart-item-checkbox:checked');
+      if (checkedBoxes.length === 0) {
+        showToast('⚠️ Please select at least one item to buy.', true);
+        return;
+      }
+
+      var selectedIndices = [];
+      for (var i = 0; i < checkedBoxes.length; i++) {
+        selectedIndices.push(parseInt(checkedBoxes[i].dataset.index, 10));
+      }
+
+      openBulkBuyModal(selectedIndices);
+    }
+
+    // ============================================================
+    //  📦  BUY MODAL
+    // ============================================================
+    var buyModalInstance = null;
+    var currentBuyIndex = -1;
+    var currentBulkIndices = [];
+
+    function openBuyModal(index) {
+      currentBuyIndex = index;
+      currentBulkIndices = [];
+      document.getElementById('buyMode').value = 'single';
+      document.getElementById('bulkItemsSection').style.display = 'none';
+      document.getElementById('singleItemSection').style.display = 'block';
+
+      var item = cart[index];
+      document.getElementById('buyItemIndex').value = index;
+      document.getElementById('singleItemName').textContent = item.name + ' - P' + item.price + ' (' + (item.condition || 'Pre-owned, Refurbished') + ')';
+      document.getElementById('buyCondition').value = item.condition || 'Pre-owned, Refurbished';
+
+      document.getElementById('customerName').value = '';
+      document.getElementById('customerEmail').value = '';
+      document.getElementById('customerPhone').value = '';
+      document.getElementById('buyService').value = '';
+
+      if (!buyModalInstance) {
+        var modalEl = document.getElementById('buyModal');
+        buyModalInstance = new bootstrap.Modal(modalEl);
+      }
+      buyModalInstance.show();
+    }
+
+    function openBulkBuyModal(indices) {
+      currentBulkIndices = indices;
+      currentBuyIndex = -1;
+      document.getElementById('buyMode').value = 'bulk';
+      document.getElementById('buyItemIndex').value = '';
+      document.getElementById('bulkItemsSection').style.display = 'block';
+      document.getElementById('singleItemSection').style.display = 'none';
+
+      var list = document.getElementById('bulkItemsList');
+      list.innerHTML = '';
+      var total = 0;
+      for (var i = 0; i < indices.length; i++) {
+        var item = cart[indices[i]];
+        var div = document.createElement('div');
+        div.className = 'item-row';
+        div.textContent = '📦 ' + item.name + ' - P' + item.price + ' (' + (item.condition || 'Pre-owned, Refurbished') + ')';
+        list.appendChild(div);
+        total += item.price;
+      }
+      document.getElementById('bulkTotalPrice').textContent = total.toFixed(2);
+
+      document.getElementById('customerName').value = '';
+      document.getElementById('customerEmail').value = '';
+      document.getElementById('customerPhone').value = '';
+      document.getElementById('buyService').value = '';
+      document.getElementById('buyCondition').value = '';
+
+      if (!buyModalInstance) {
+        var modalEl = document.getElementById('buyModal');
+        buyModalInstance = new bootstrap.Modal(modalEl);
+      }
+      buyModalInstance.show();
+    }
+
+    // ============================================================
+    //  ✅  CONFIRM BUY
+    // ============================================================
+    document.getElementById('confirmBuyBtn').addEventListener('click', function() {
+      var mode = document.getElementById('buyMode').value;
+
+      var customerName = document.getElementById('customerName').value.trim();
+      var customerEmail = document.getElementById('customerEmail').value.trim();
+      var customerPhone = document.getElementById('customerPhone').value.trim();
+      var service = document.getElementById('buyService').value;
+
+      if (!customerName || !customerEmail || !customerPhone) {
+        showToast('⚠️ Please enter your contact details.', true);
+        return;
+      }
+
+      if (customerEmail.indexOf('@') === -1 || customerEmail.indexOf('.') === -1) {
+        showToast('⚠️ Please enter a valid email address.', true);
+        return;
+      }
+
+      if (!service) {
+        showToast('⚠️ Please select a service method.', true);
+        return;
+      }
+
+      var confirmBtn = document.getElementById('confirmBuyBtn');
+      confirmBtn.disabled = true;
+      confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Placing order...';
+
+      var orders = [];
+
+      if (mode === 'single' && currentBuyIndex >= 0) {
+        var item = cart[currentBuyIndex];
+        orders.push({
+          customer_name: customerName,
+          customer_email: customerEmail,
+          customer_phone: customerPhone,
+          product_name: item.name,
+          price: item.price,
+          color: 'N/A',
+          size: 'N/A',
+          service_method: service,
+          status: 'pending',
+          ordered_at: new Date().toISOString()
+        });
+      } else if (mode === 'bulk' && currentBulkIndices.length > 0) {
+        for (var i = 0; i < currentBulkIndices.length; i++) {
+          var item = cart[currentBulkIndices[i]];
+          orders.push({
+            customer_name: customerName,
+            customer_email: customerEmail,
+            customer_phone: customerPhone,
+            product_name: item.name,
+            price: item.price,
+            color: 'N/A',
+            size: 'N/A',
+            service_method: service,
+            status: 'pending',
+            ordered_at: new Date().toISOString()
+          });
+        }
+      } else {
+        showToast('❌ Error: No items selected.', true);
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = '✅ Place Order';
+        return;
+      }
+
+      saveMultipleOrdersToSupabase(orders, function(result) {
+        console.log('📥 Save result:', result);
+
+        if (result.success) {
+          var indicesToRemove = [];
+          if (mode === 'single' && currentBuyIndex >= 0) {
+            indicesToRemove.push(currentBuyIndex);
+          } else if (mode === 'bulk') {
+            indicesToRemove = currentBulkIndices.slice().sort(function(a, b) { return b - a; });
+          }
+
+          for (var r = 0; r < indicesToRemove.length; r++) {
+            cart.splice(indicesToRemove[r], 1);
+          }
+
+          saveAndRender();
+          showToast('✅ ' + result.successCount + ' order(s) placed successfully! Check your email.');
+
+          if (selectModeActive) {
+            toggleSelectMode();
+          }
+
+          if (buyModalInstance) {
+            buyModalInstance.hide();
+          }
+        } else {
+          if (result.successCount > 0) {
+            showToast('⚠️ ' + result.successCount + ' order(s) placed, but some failed.');
+          } else {
+            showToast('❌ Failed to place orders. Please try again.', true);
+          }
+        }
+
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = '✅ Place Order';
+      });
+    });
+
+    // ============================================================
+    //  🚀  INIT
+    // ============================================================
+    function init() {
+      renderCart();
+
+      document.querySelector('#buyModal .btn-secondary').addEventListener('click', function() {
+        if (buyModalInstance) {
+          buyModalInstance.hide();
+        }
+      });
+
+      document.querySelector('#buyModal .btn-close').addEventListener('click', function() {
+        if (buyModalInstance) {
+          buyModalInstance.hide();
+        }
+      });
+
+      console.log('✅ Cart page loaded with ' + cart.length + ' items');
+    }
+
+    // Expose functions globally
+    window.toggleSelectMode = toggleSelectMode;
+    window.selectAllItems = selectAllItems;
+    window.deselectAllItems = deselectAllItems;
+    window.updateSelectedCount = updateSelectedCount;
+    window.bulkBuy = bulkBuy;
+    window.openBuyModal = openBuyModal;
+    window.openBulkBuyModal = openBulkBuyModal;
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
 
 </body>
+
 </html>
